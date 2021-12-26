@@ -15,8 +15,9 @@ regex_field = re.compile('{{(\w+)(\:\w+)?\!?}}')
 regex_email = re.compile('[^\s<>"\',;]+\@[^\s<>"\',;]+',re.IGNORECASE)
 
 
-def uuid():
+def uuid():   #可能產生bc5f89c0-63d8-4aeb-bfde-108f2fff2a8a之類的唯一代碼，轉字串
     return str(uuid4()).replace('-','').upper()
+
 
 def rsakeys():
     (pubkey,privkey) = rsa.newkeys(1024)
@@ -24,13 +25,19 @@ def rsakeys():
 
 def sign(text,privkey_pem):
     privkey = rsa.PrivateKey.load_pkcs1(privkey_pem)
-    signature = base64.b16encode(rsa.sign(text.encode("utf-8"),privkey,'SHA-1'))
+    # print(type(text))
+    if type(text) == bytes:
+        signature = base64.b16encode(rsa.sign(text,privkey,'SHA-1'))
+    else:
+        signature = base64.b16encode(rsa.sign(text.encode(),privkey,'SHA-1'))
     return signature
 
-def ballot2form(ballot_model, readonly=False, vars=None, counters=None):
+def ballot2form(ballot_model, readonly=False, vars=None, counters=None):    
     """If counters is passed this counts the results in the ballot.
     If readonly is False, then the voter has not yet voted; if readonly
     is True, then they have just voted."""    
+    # ballot_model = [{"preamble":"","answers":["A","V","X"],"algorithm":"simple-majority","randomize":true,"comments":false,"name":"321331244310","type":"simple-majority"}]
+    # ballot_model is a str????
     ballot_structure = json.loads(ballot_model)
     ballot = FORM()
     for question in ballot_structure:
@@ -41,11 +48,13 @@ def ballot2form(ballot_model, readonly=False, vars=None, counters=None):
         table = TABLE()
         div.append(table)
         name = question['name']
-        if counters:
+        if counters:    #如果counters是None，表示選舉還沒結束
             options = []
+            print(question['algorithm'],"喔喔喔")
             for answer in question['answers']:
-                key = name+'/simple-majority/'+answer
+                key = name+ '/'+question['algorithm']+'/' +answer
                 options.append((counters.get(key,0), answer))
+                # print(options)
             options.sort(reverse=True)
             options = map(lambda a: a[1], options)
         else:
@@ -53,9 +62,12 @@ def ballot2form(ballot_model, readonly=False, vars=None, counters=None):
             if question['randomize']:
                 random.shuffle(options)
         for answer in options:
-            key = name + '/simple-majority/' + answer
+            key = name + '/'+question['algorithm']+'/' + answer
             if not counters:
+                print(question['algorithm'],"喔喔ㄚㄚㄚ")
                 if question['algorithm'] == 'simple-majority':
+                    inp = INPUT(_name=question['name'], _type="radio", _value=answer)
+                if question['algorithm'] == 'aaasimple-majority':
                     inp = INPUT(_name=question['name'], _type="radio", _value=answer)
                 if vars and vars.get(name) == answer:
                     inp['_checked'] = True

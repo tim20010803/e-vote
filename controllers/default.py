@@ -1,6 +1,7 @@
 from ballot import ballot2form, form2ballot, blank_ballot, sign, uuid, regex_email, rsakeys
 from ranking_algorithms import iro, borda, schulze
 import re
+import json
 
 def index():
     return dict()
@@ -38,9 +39,11 @@ def start():
     check_closed(election)
     response.subtitle = election.title+T(' / Start')
     demo = ballot2form(election.ballot_model)
+    # election.ballot_model = [{"preamble":"","answers":["A","V","X"],"algorithm":"simple-majority","randomize":true,"comments":false,"name":"321331244310","type":"simple-majority"}]
+
     return dict(demo=demo,election=election)
 
-@auth.requires(auth.user and auth.user.is_manager)
+@auth.requires(auth.user and auth.user.is_manager)     # 信箱設置:evote\private\appconfig.ini
 def start_callback():
     election = db.election(request.args(0,cast=int)) or redirect(URL('index'))
     check_closed(election)
@@ -187,18 +190,33 @@ def compute_results(election):
     voted_ballots = db(query)(db.ballot.voted==True).select()
     counters = {}
     rankers = {}
-    for k,ballot in enumerate(voted_ballots):        
-        for name in ballot.results:
+    
+    ballot_structure = json.loads(election.ballot_model)   #取得計票方法名稱
+    # print(type(ballot_structure))
+    # print(ballot_structure)
+    
+    for k,ballot in enumerate(voted_ballots):   
+        for name in ballot.results:  #ballot.results is a dict  name is ballot number
             # name is the name of a group as in {{name:ranking}}
             # scheme is "ranking" or "checkbox" (default)
             # value is the <input value="value"> assigned to this checkbox or input
-
+            print(ballot.results,"efafaefs")
+            # 投票辦法修改處:evote\static\js\custom.js
             # INPORTANT ONLY SUPPORT SIMPLE MAJORITY
-            key = name +'/simple-majority/' + ballot.results[name]
+            ballot_way = ""
+            for results_dict in ballot_structure:
+                if results_dict['name'] == name:               
+                    ballot_way = results_dict['algorithm']
+                    break
+            
+            key = name +'/'+ballot_way+'/' + ballot.results[name]
             (name,scheme,value) = key.split('/',3)
-            if scheme == 'simple-majority':
+            print(name,scheme,value,"aaaa")
+            if scheme == 'aaasimple-majority':
+                
                 # counters[key] counts how many times this checkbox was checked
-                counters[key] = counters.get(key,0) + 1
+                counters[key] = counters.get(key,0) + 1    #更新票數
+    """            
             elif scheme == 'ranking':
                 raise NotImplementedError
                 # rankers[name] = [[2,1,3],[3,1,2],[1,2,3],...]
@@ -249,7 +267,7 @@ def compute_results(election):
             counters[key] += ' I:%s' % r
         for (r,k) in cschulze:
             counters[key] += ' S:%s' % r
-
+    """
     print (counters)
     election.update_record(counters=counters)
 
