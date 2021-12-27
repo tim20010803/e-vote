@@ -50,7 +50,7 @@ def ballot2form(ballot_model, readonly=False, vars=None, counters=None):
         name = question['name']
         if counters:    #如果counters是None，表示選舉還沒結束
             options = []
-            print(question['algorithm'],"喔喔喔")
+            # print(question['algorithm'],"喔喔喔")
             for answer in question['answers']:
                 key = name+ '/'+question['algorithm']+'/' +answer
                 options.append((counters.get(key,0), answer))
@@ -64,11 +64,11 @@ def ballot2form(ballot_model, readonly=False, vars=None, counters=None):
         for answer in options:
             key = name + '/'+question['algorithm']+'/' + answer
             if not counters:
-                print(question['algorithm'],"喔喔ㄚㄚㄚ")
+                # print(question['algorithm'],"喔喔ㄚㄚㄚ")
                 if question['algorithm'] == 'simple-majority':
                     inp = INPUT(_name=question['name'], _type="radio", _value=answer)
-                if question['algorithm'] == 'aaasimple-majority':
-                    inp = INPUT(_name=question['name'], _type="radio", _value=answer)
+                # if question['algorithm'] == 'aaasimple-majority':
+                    # inp = INPUT(_name=question['name'], _type="radio", _value=answer)
                 if vars and vars.get(name) == answer:
                     inp['_checked'] = True
                 if readonly:

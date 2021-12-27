@@ -25,11 +25,13 @@
             <textarea style="border: 2px solid #f1f1f1" 
                       v-model="question.preamble"></textarea>
           </div>
-          <div style="padding-left:50px">            
-            <label>Algorithm</label>
-            <select v-model="question.type" style="width:200px">
-              <option v-for="algorithm in algorithms"
-                      v-bind:value="algorithm" v-html="algorithm"></option>
+          <div style="padding-left:50px">   
+		  
+			<p>Algorithm:simple-majority</p>			
+            <!-- <label>Algorithm</label> -->
+            <!-- <select v-model="question.type" style="width:200px"> -->
+              <!-- <option v-for="algorithm in algorithms" -->
+                      <!-- v-bind:value="algorithm" v-html="algorithm"></option> -->
             </select>
             Randomize? <input type="checkbox" v-model="question.randomize"/>
             Comments? <input type="checkbox" v-model="question.comments"/>

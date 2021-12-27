@@ -200,7 +200,7 @@ def compute_results(election):
             # name is the name of a group as in {{name:ranking}}
             # scheme is "ranking" or "checkbox" (default)
             # value is the <input value="value"> assigned to this checkbox or input
-            print(ballot.results,"efafaefs")
+
             # 投票辦法修改處:evote\static\js\custom.js
             # INPORTANT ONLY SUPPORT SIMPLE MAJORITY
             ballot_way = ""
@@ -211,8 +211,8 @@ def compute_results(election):
             
             key = name +'/'+ballot_way+'/' + ballot.results[name]
             (name,scheme,value) = key.split('/',3)
-            print(name,scheme,value,"aaaa")
-            if scheme == 'aaasimple-majority':
+            # print(name,scheme,value,"aaaa")
+            if scheme == 'simple-majority':
                 
                 # counters[key] counts how many times this checkbox was checked
                 counters[key] = counters.get(key,0) + 1    #更新票數
@@ -268,7 +268,7 @@ def compute_results(election):
         for (r,k) in cschulze:
             counters[key] += ' S:%s' % r
     """
-    print (counters)
+    # print (counters)
     election.update_record(counters=counters)
 
 #@cache(request.env.path_info,time_expire=300,cache_model=cache.ram)
