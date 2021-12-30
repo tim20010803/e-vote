@@ -21,7 +21,7 @@ E-Vote uses the [web2py](http://web2py.com/) framework and can be installed like
 
       $ git clone --recursive https://github.com/web2py/web2py.git
       $ cd web2py/applications
-      $ git clone https://github.com/mdipierro/evote.git
+      $ git clone https://github.com/tim20010803/evote.git
       $ cd ..
       $ sudo /etc/init.d/apachectl stop  # <-- stop other web server if needed
       $ pip install rsa
@@ -126,5 +126,5 @@ Change "localhost" to "logging"...
 ...and now the emails will print out on the web server console instead of being sent.  You'll see things like this on the console:
 
       Welcome jrandom@example.com!  Click on the link
-      http://hostname_or_ip_etc.com/init/default/user/verify_email/18b9f977-249f-45e8-93fe-59161a687f88 
+      http://hostname_or_ip_etc.com/init/default/user/verify_email/18b9f977-249f-45e8-93fe-59161a687f88
       to verify your email
