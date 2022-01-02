@@ -1,0 +1,4 @@
+databases/*
+sessions/*
+static/zips/*
+__pycache__/
