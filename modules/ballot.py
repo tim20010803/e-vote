@@ -27,9 +27,9 @@ def sign(text,privkey_pem):
     privkey = rsa.PrivateKey.load_pkcs1(privkey_pem)
     # print(type(text))
     if type(text) == bytes:
-        signature = base64.b16encode(rsa.sign(text,privkey,'SHA-1'))
+        signature = base64.b16encode(rsa.sign(text,privkey,'SHA-256'))
     else:
-        signature = base64.b16encode(rsa.sign(text.encode(),privkey,'SHA-1'))
+        signature = base64.b16encode(rsa.sign(text.encode(),privkey,'SHA-256'))
     return signature
 
 def ballot2form(ballot_model, readonly=False, vars=None, counters=None):    
