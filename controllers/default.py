@@ -1,5 +1,4 @@
 from ballot import ballot2form, form2ballot, blank_ballot, sign, uuid, regex_email, rsakeys
-
 import re
 import json
 
@@ -216,59 +215,6 @@ def compute_results(election):
                 
                 # counters[key] counts how many times this checkbox was checked
                 counters[key] = counters.get(key,0) + 1    #更新票數
-    """            
-            elif scheme == 'ranking':
-                raise NotImplementedError
-                # rankers[name] = [[2,1,3],[3,1,2],[1,2,3],...]
-                #                 The sublists in rankers mean:
-                #                 [[my first-preferred candidate is
-                #                   the candidate whose identifying
-                #                   number on the original ballot was
-                #                   <the number given in this first
-                #                   position here>],
-                #                  [my second-preferred candidate is
-                #                   the candidate whose identifying
-                #                   number on the original ballot was
-                #                   <the number given in this second
-                #                   position here>],
-                #                  [my third-preferred candidate is
-                #                   the candidate whose identifying
-                #                   number on the original ballot was
-                #                   <the number given in this third
-                #                   position here>], ...]
-                #
-                # len(rankers[name]) = len(voted_ballots)
-                # rankers[name][i][0] = ...?
-                if not name in rankers:
-                    rankers[name] = []
-                if len(rankers[name])<k+1:
-                    rankers[name].append([])
-                vote = rankers[name][-1]
-                print ("ballot id:",ballot.id, "key:",key, "results[key]:",results[key], "vote:",vote)
-                ranking = int(results[key])
-                d = ranking-len(vote)
-                if d>0:
-                    print ("vote before:", vote)
-                    vote+=[0]*d
-                    print ("vote after: ", vote)
-                vote[ranking-1] = value
-            else:
-                raise RuntimeError("Invalid Voting Scheme")    
-
-    for name in rankers:
-        votes = rankers[name]
-        cmajority = borda(votes,mode='exponential')
-        ciro = iro(votes)
-        cschulze = schulze(votes)
-        key = name+'/simple-majority/'+k
-        for (r,k) in cmajority:
-            counters[key] = 'M:%s' % r
-        for (r,k) in ciro:
-            counters[key] += ' I:%s' % r
-        for (r,k) in cschulze:
-            counters[key] += ' S:%s' % r
-    """
-    # print (counters)
     election.update_record(counters=counters)
 
 #@cache(request.env.path_info,time_expire=300,cache_model=cache.ram)
