@@ -1,5 +1,5 @@
 from ballot import ballot2form, form2ballot, blank_ballot, sign, uuid, regex_email, rsakeys
-from ranking_algorithms import iro, borda, schulze
+
 import re
 import json
 
