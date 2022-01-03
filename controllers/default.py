@@ -17,6 +17,7 @@ def elections():
     return dict(elections=elections,ballots=ballots)
 
 @auth.requires(auth.user and auth.user.is_manager)
+# @auth.requires(auth.user)
 def edit():
     response.subtitle = T('Edit Ballot')
     election = db.election(request.args(0,cast=int,default=0))
@@ -24,17 +25,18 @@ def edit():
         redirect(URL('not_authorized'))
     if not election:
         (pubkey, privkey) = rsakeys()
-        db.election.voters.default = auth.user.email
+        # db.election.voters.default = auth.user.email
         db.election.managers.default = auth.user.email
         db.election.public_key.default = pubkey
-        db.election.private_key.default = privkey        
+        db.election.private_key.default = privkey
     form = SQLFORM(db.election,election,deletable=True,
                    submit_button="Save and Preview").process()
     if form.accepted: redirect(URL('start',args=form.vars.id))
     return dict(form=form)
 
 @auth.requires(auth.user and auth.user.is_manager)
-def start():    
+# @auth.requires(auth.user)
+def start():
     election = db.election(request.args(0,cast=int)) or redirect(URL('index'))
     check_closed(election)
     response.subtitle = election.title+T(' / Start')
@@ -43,7 +45,8 @@ def start():
 
     return dict(demo=demo,election=election)
 
-@auth.requires(auth.user and auth.user.is_manager)     # 信箱設置:evote\private\appconfig.ini
+@auth.requires(auth.user and auth.user.is_manager) # 信箱設置:evote\private\appconfig.ini
+# @auth.requires(auth.user)
 def start_callback():
     election = db.election(request.args(0,cast=int)) or redirect(URL('index'))
     check_closed(election)
@@ -53,6 +56,11 @@ def start_callback():
     failures = []
     emails = []
     owner_email = election.created_by.email
+    url='applications/evote/uploads/'+str(election.voters)
+    print(url)
+    with open(url) as stream:
+        election.voters=stream.read()
+    print("test "+election.voters)
     if form.process().accepted:
         ballot_counter = db(db.ballot.election_id==election.id).count()
         for email in regex_email.findall(election.voters):
@@ -132,15 +140,16 @@ def self_service():
             else:
                 response.flash = T('Unable to send email')
     return dict(form=form)
-                                
 
-@auth.requires(auth.user and auth.user.is_manager)
-def reminders():    
+# @auth.requires(auth.user and auth.user.is_manager)
+@auth.requires(auth.user)
+def reminders():
     election = db.election(request.args(0,cast=int)) or redirect(URL('index'))
     response.subtitle = election.title+T(' / Reminders')
     return dict(election=election)
 
 @auth.requires(auth.user and auth.user.is_manager)
+# @auth.requires(auth.user)
 def reminders_callback():
     election = db.election(request.args(0,cast=int)) or redirect(URL('index'))
     owner_email = election.created_by.email
@@ -154,7 +163,7 @@ def reminders_callback():
         key = 'voter_%s' % voter.id
         fields.append(Field(key,'boolean',default=not voter.voted,
                             label = voter.email))
-        if key in request.post_vars:            
+        if key in request.post_vars:
             link = URL('vote',args=(election.id,voter_uuid),scheme=SCHEME)
             link_ballots = URL('ballots',args=election.id,scheme=SCHEME)
             link_results = URL('results',args=election.id,scheme=SCHEME)
@@ -172,7 +181,7 @@ def reminders_callback():
         sender = election.email_sender or mail.settings.sender
         for to, subject, body in emails:
             if not mail.send(to=to, subject=subject, message=body, sender=sender):
-                                 
+
                 failures.append(email)
         if not failures:
             session.flash = T('Emails sent successfully')
@@ -180,6 +189,7 @@ def reminders_callback():
     return dict(form=form,failures=failures,election=election)
 
 @auth.requires(auth.user and auth.user.is_manager)
+# @auth.requires(auth.user)
 def recompute_results():
     election = db.election(request.args(0,cast=int)) or redirect(URL('index'))
     compute_results(election)
@@ -190,12 +200,12 @@ def compute_results(election):
     voted_ballots = db(query)(db.ballot.voted==True).select()
     counters = {}
     rankers = {}
-    
+
     ballot_structure = json.loads(election.ballot_model)   #取得計票方法名稱
     # print(type(ballot_structure))
     # print(ballot_structure)
-    
-    for k,ballot in enumerate(voted_ballots):   
+
+    for k,ballot in enumerate(voted_ballots):
         for name in ballot.results:  #ballot.results is a dict  name is ballot number
             # name is the name of a group as in {{name:ranking}}
             # scheme is "ranking" or "checkbox" (default)
@@ -205,18 +215,18 @@ def compute_results(election):
             # INPORTANT ONLY SUPPORT SIMPLE MAJORITY
             ballot_way = ""
             for results_dict in ballot_structure:
-                if results_dict['name'] == name:               
+                if results_dict['name'] == name:
                     ballot_way = results_dict['algorithm']
                     break
-            
+
             key = name +'/'+ballot_way+'/' + ballot.results[name]
             (name,scheme,value) = key.split('/',3)
             # print(name,scheme,value,"aaaa")
             if scheme == 'simple-majority':
-                
+
                 # counters[key] counts how many times this checkbox was checked
                 counters[key] = counters.get(key,0) + 1    #更新票數
-    """            
+    """
             elif scheme == 'ranking':
                 raise NotImplementedError
                 # rankers[name] = [[2,1,3],[3,1,2],[1,2,3],...]
@@ -253,7 +263,7 @@ def compute_results(election):
                     print ("vote after: ", vote)
                 vote[ranking-1] = value
             else:
-                raise RuntimeError("Invalid Voting Scheme")    
+                raise RuntimeError("Invalid Voting Scheme")
 
     for name in rankers:
         votes = rankers[name]
@@ -298,9 +308,9 @@ def ballots():
     election = db.election(request.args(0,cast=int)) or \
         redirect(URL('invalid_link'))
     response.subtitle = election.title + T(' / Ballots')
-    ballots = db(db.ballot.election_id==election.id).select(        
+    ballots = db(db.ballot.election_id==election.id).select(
         orderby=db.ballot.ballot_uuid)
-    tampered = len(set(hash_ballot(b.ballot_content) 
+    tampered = len(set(hash_ballot(b.ballot_content)
                        for b in ballots if b.voted))>1
     return dict(ballots=ballots,election=election, tampered=tampered)
 
@@ -328,6 +338,7 @@ def check_closed(election):
         redirect(URL('elections'))
 
 @auth.requires(auth.user and auth.user.is_manager)
+# @auth.requires(auth.user)
 def close_election():
     import zipfile, os
     election = db.election(request.args(0,cast=int)) or \
@@ -402,18 +413,18 @@ def ballot_verifier():
     response.headers['Content-Type'] = 'text/plain'
     return ballot()
 
-def vote():    
+def vote():
     import hashlib
     response.menu = []
     election_id = request.args(0,cast=int)
     voter_uuid = request.args(1)
-    election = db.election(election_id) or redirect(URL('invalid_link'))       
+    election = db.election(election_id) or redirect(URL('invalid_link'))
     voter = db(db.voter.election_id==election_id)\
         (db.voter.voter_uuid==voter_uuid).select().first() or \
         redirect(URL('invalid_link'))
     if not DEBUG_MODE and voter.voted:
         redirect(URL('voted_already'))
-    
+
     if election.deadline and request.now>election.deadline:
         session.flash = T('Election is closed')
         if voter.voted:
@@ -469,6 +480,7 @@ def no_more_ballots():
     return dict(message=T('Run out of ballots. Your vote was not recorded'))
 
 @auth.requires(auth.user and auth.user.is_manager)
+# @auth.requires(auth.user)
 def voters_csv():
     election = db.election(request.args(0,cast=int,default=0),created_by=auth.user.id)
     return db(db.voter.election_id==election.id).select(
@@ -482,3 +494,6 @@ def support():
 
 def contactus():
     return locals()
+
+def upload_voters():
+    return dict(form=SQLFORM(db.election).process())

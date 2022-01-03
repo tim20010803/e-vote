@@ -3,24 +3,24 @@ NE = IS_NOT_EMPTY()
 maybe_can_choose = AS_SERVICE or DEVELOPMENT
 
 auth.settings.extra_fields['auth_user'] = [
-    Field('is_manager','boolean',default=False, writable=maybe_can_choose, readable=maybe_can_choose)]
-          
+    Field('is_manager','boolean',default=True, writable=maybe_can_choose, readable=maybe_can_choose),
+
 auth.define_tables(username=False, signature=False)
 
 db.define_table(
     'election',
     Field('title',requires=NE),
     Field('ballot_model','text',requires=NE), # empty ballot
-    Field('voters','text',requires=NE),
+    Field('voters','upload',requires=NE,autodelete=True),
     Field('managers','text',requires=NE),
     Field('deadline','datetime'),
     Field('vote_email','text'),
     Field('voted_email','text'),
     Field('email_sender',requires=IS_EMAIL(),default=mail.settings.sender,writable=False),
     Field('not_voted_email','text'),
-    Field('public_key','text',writable=False,readable=False),                
-    Field('private_key','text',writable=False,readable=False),                
-    Field('counters','json',writable=False,readable=False),                
+    Field('public_key','text',writable=False,readable=False),
+    Field('private_key','text',writable=False,readable=False),
+    Field('counters','json',writable=False,readable=False),
     Field('closed','boolean',writable=False,readable=False),
     auth.signature,
     format='%(title)s')
