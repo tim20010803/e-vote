@@ -1,5 +1,4 @@
 from ballot import ballot2form, form2ballot, blank_ballot, sign, uuid, regex_email, rsakeys
-from ranking_algorithms import iro, borda, schulze
 import re
 import json
 
@@ -226,6 +225,7 @@ def compute_results(election):
 
                 # counters[key] counts how many times this checkbox was checked
                 counters[key] = counters.get(key,0) + 1    #更新票數
+<<<<<<< HEAD
     """
             elif scheme == 'ranking':
                 raise NotImplementedError
@@ -279,6 +279,8 @@ def compute_results(election):
             counters[key] += ' S:%s' % r
     """
     # print (counters)
+=======
+>>>>>>> e7e2e5384572545eba33f5c0ac79820bd941e058
     election.update_record(counters=counters)
 
 #@cache(request.env.path_info,time_expire=300,cache_model=cache.ram)
