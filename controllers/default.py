@@ -231,10 +231,14 @@ def compute_results(election):
 def results():
     id = request.args(0,cast=int) or redirect(URL('index'))
     election = db.election(id) or redirect(URL('index'))
-    if auth.user_id!=election.created_by and \
-            not(election.deadline and request.now>election.deadline):
+    # if auth.user_id!=election.created_by and \
+            # not(election.deadline and request.now>election.deadline):
+        # session.flash = T('Results not yet available')
+        # redirect(URL('index'))      
+    if not(election.deadline and request.now>election.deadline):
         session.flash = T('Results not yet available')
-        redirect(URL('index'))
+        redirect(URL('elections'))
+        
     response.subtitle = election.title + T(' / Results')
     if (DEBUG_MODE or not election.counters or
         not election.deadline or request.now<=election.deadline):
@@ -348,7 +352,7 @@ def ballot():
     if (not election.deadline or election.deadline>request.now) \
             and ballot.signature!=signature:
         session.flash = "your ballot is not visible until election is closed"
-        redirect(URL('index'))
+        redirect(URL('elections'))
     response.subtitle = election.title + T(' / Ballot')
     return dict(ballot=ballot,election=election)
 

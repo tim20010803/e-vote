@@ -23,10 +23,13 @@ signature = base64.b16decode("{{=ballot.signature.split('-')[1]}}")
 pk_pem = """
 {{=election.public_key.strip()}}
 """
+public_key = rsa.PublicKey.load_pkcs1(pk_pem)
 
 # this is the code that verifies the signature
-public_key = rsa.PublicKey.load_pkcs1(pk_pem)
-if rsa.verify(ballot, signature, public_key):
-    print 'valid'
-else:
-    print 'invalid'
+try:
+    if rsa.verify(ballot.encode(), signature, public_key):
+        print('valid')
+    else:
+        print('invalid')
+except:
+    print('invalid')
