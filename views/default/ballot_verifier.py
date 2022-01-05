@@ -1,35 +1,12 @@
 ####################################################################
 # This is a python program that allows you to verify your ballot   #
-# using the RSA algorithm. It requires the Python interpreter from #
-#   http://python.org                                              #
-# it also requires the RSA module which you can install with       #
-#   pip install rsa                                                #
-# Save this program with a name like "verify.py" and run it        #
-# The output of this program "valid" or "invalid"                  #
+# using the RSA algorithm. You do not need to down any package.    #
+# Please clone following text.                                     #
+# Run "verify.py" and paste on to input them, then the output of   #
+# this program will be "valid" or "invalid"                        #
 ####################################################################
 
-# import required libraries
-import base64, rsa # install module with "pip install rsa".
-
-# this is the ballot to verify
-ballot = """
 {{=XML(ballot.ballot_content)}}
-""".strip()
-
-# this is the ballot RSA signature
-signature = base64.b16decode("{{=ballot.signature.split('-')[1]}}")
-
-# this is the election public key
-pk_pem = """
+{{=ballot.signature.split('-')[1]}}
 {{=election.public_key.strip()}}
-"""
-public_key = rsa.PublicKey.load_pkcs1(pk_pem)
 
-# this is the code that verifies the signature
-try:
-    if rsa.verify(ballot.encode(), signature, public_key):
-        print('valid')
-    else:
-        print('invalid')
-except:
-    print('invalid')
