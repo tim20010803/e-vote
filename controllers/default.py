@@ -275,11 +275,11 @@ def email_voter_and_managers(election,voter,ballot,body):
                     subject='Receipt for %s' % election.title,
                     message=body,attachments=[attachment],
                     sender=sender)
-    mail.send(to=regex_email.findall(election.managers),
-              subject='Copy of Receipt for %s' % election.title,
-              message=body,
-              attachments=[attachment],
-              sender=sender)
+    # mail.send(to=regex_email.findall(election.managers),
+              # subject='Copy of Receipt for %s' % election.title,
+              # message=body,
+              # attachments=[attachment],
+              # sender=sender)
     return ret
 
 def check_closed(election):
@@ -401,7 +401,6 @@ def vote():
                              voted=True,assigned=True,voted_on=request.now)
         voter.update_record(voted=True)
         link = URL('ballot',args=(ballot.ballot_uuid,ballot.signature), scheme='http')
-
         body = message_replace(election.voted_email,link=link,
                                   election_id=election.id,
                                   owner_email = election.created_by.email,
