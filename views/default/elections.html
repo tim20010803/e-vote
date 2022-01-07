@@ -3,11 +3,10 @@
 <div class="container max900">
   <div class="fill">
     <div class="padded">
-      {{if auth.user.is_manager:}}
       <h3>Create a new election</h3>
       {{=A(T('New Election'),_href=URL('edit'),_class="btn")}}
       {{pass}}
-      
+
       <h2>My Elections</h2>
 
       {{if ballots:}}
@@ -50,7 +49,7 @@
             Created on {{=election.created_on}}
             {{if election.closed:}}(closed){{pass}}
           </td>
-          <td class="right">    
+          <td class="right">
             <ul class="menu">
               <li><a class="btn">Action ▼</a>
                 <ul>

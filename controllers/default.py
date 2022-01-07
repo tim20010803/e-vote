@@ -15,7 +15,7 @@ def elections():
         (db.election.deadline==None)|(db.election.deadline>request.now)).select()
     return dict(elections=elections,ballots=ballots)
 
-@auth.requires(auth.user and auth.user.is_manager)
+# @auth.requires(auth.user and auth.user.is_manager)
 # @auth.requires(auth.user)
 def edit():
     response.subtitle = T('Edit Ballot')
@@ -25,7 +25,7 @@ def edit():
     if not election:
         (pubkey, privkey) = rsakeys()
         # db.election.voters.default = auth.user.email
-        db.election.managers.default = auth.user.email
+        db.election.manager.default = auth.user.email
         db.election.public_key.default = pubkey
         db.election.private_key.default = privkey
     form = SQLFORM(db.election,election,deletable=True,
@@ -33,7 +33,7 @@ def edit():
     if form.accepted: redirect(URL('start',args=form.vars.id))
     return dict(form=form)
 
-@auth.requires(auth.user and auth.user.is_manager)
+# @auth.requires(auth.user and auth.user.is_manager)
 # @auth.requires(auth.user)
 def start():
     election = db.election(request.args(0,cast=int)) or redirect(URL('index'))
@@ -44,7 +44,7 @@ def start():
 
     return dict(demo=demo,election=election)
 
-@auth.requires(auth.user and auth.user.is_manager) # 信箱設置:evote\private\appconfig.ini
+# @auth.requires(auth.user and auth.user.is_manager) # 信箱設置:evote\private\appconfig.ini
 # @auth.requires(auth.user)
 def start_callback():
     election = db.election(request.args(0,cast=int)) or redirect(URL('index'))
@@ -141,13 +141,13 @@ def self_service():
     return dict(form=form)
 
 # @auth.requires(auth.user and auth.user.is_manager)
-@auth.requires(auth.user)
+# @auth.requires(auth.user)
 def reminders():
     election = db.election(request.args(0,cast=int)) or redirect(URL('index'))
     response.subtitle = election.title+T(' / Reminders')
     return dict(election=election)
 
-@auth.requires(auth.user and auth.user.is_manager)
+# @auth.requires(auth.user and auth.user.is_manager)
 # @auth.requires(auth.user)
 def reminders_callback():
     election = db.election(request.args(0,cast=int)) or redirect(URL('index'))
@@ -187,7 +187,7 @@ def reminders_callback():
             redirect(URL('elections'),client_side=True)
     return dict(form=form,failures=failures,election=election)
 
-@auth.requires(auth.user and auth.user.is_manager)
+# @auth.requires(auth.user and auth.user.is_manager)
 # @auth.requires(auth.user)
 def recompute_results():
     election = db.election(request.args(0,cast=int)) or redirect(URL('index'))
@@ -261,7 +261,7 @@ def ballots():
     return dict(ballots=ballots,election=election, tampered=tampered)
 
 # @auth.requires(auth.user and auth.user.is_manager)
-def email_voter_and_managers(election,voter,ballot,body):
+def email_voter_and_manager(election,voter,ballot,body):
     import io
     attachment = mail.Attachment(
         filename=ballot.ballot_uuid+'.html',
@@ -271,7 +271,7 @@ def email_voter_and_managers(election,voter,ballot,body):
                     subject='Receipt for %s' % election.title,
                     message=body,attachments=[attachment],
                     sender=sender)
-    mail.send(to=regex_email.findall(election.managers),
+    mail.send(to=election.manager,
               subject='Copy of Receipt for %s' % election.title,
               message=body,
               attachments=[attachment],
@@ -283,7 +283,7 @@ def check_closed(election):
         session.flash = T('Election already closed')
         redirect(URL('elections'))
 
-@auth.requires(auth.user and auth.user.is_manager)
+# @auth.requires(auth.user and auth.user.is_manager)
 # @auth.requires(auth.user)
 def close_election():
     import zipfile, os
@@ -298,7 +298,7 @@ def close_election():
         voters = db(db.voter.election_id==election.id)\
             (db.voter.voted==False).select()
         ballots = db(db.ballot.election_id==election.id)\
-            (db.ballot.voted==False)(db.ballot.assigned==False).select()
+            (db.ballot.voted==False).select()
         if ballots and len(voters)!=len(ballots):
             session.flash = T('Voted corrupted ballots/voter mismatch')
             redirect(URL('elections'))
@@ -311,8 +311,7 @@ def close_election():
                                       owner_email = owner_email,
                                       title=election.title,
                                       signature=ballot.signature,link=link)
-            email_voter_and_managers(election,voter,ballot,body)
-            ballot.update_record(assigned=True)
+            email_voter_and_manager(election,voter,ballot,body)
         compute_results(election)
         zippath = os.path.join(request.folder,'static','zips')
         if not os.path.exists(zippath):
@@ -326,7 +325,6 @@ def close_election():
         ballots = dbset.select(
             db.ballot.election_id,
             db.ballot.ballot_uuid,
-            db.ballot.assigned,
             db.ballot.voted,
             db.ballot.voted_on,
             db.ballot.signature,
@@ -384,7 +382,7 @@ def vote():
     if form.accepted:
         results = form.vars
         for_update = not db._uri.startswith('sqlite') # not suported by sqlite
-        #if not for_update: db.executesql('begin immediate transaction;')
+        # if not for_update: db.executesql('begin immediate transaction;')
         ballot = db(db.ballot.election_id==election_id)\
             (db.ballot.voted==False).select(
             orderby='<random>',limitby=(0,1),for_update=for_update).first() \
@@ -394,7 +392,7 @@ def vote():
         ballot.update_record(results=results,
                              ballot_content=ballot_content,
                              signature=signature,
-                             voted=True,assigned=True,voted_on=request.now)
+                             voted=True,voted_on=request.now)
         voter.update_record(voted=True)
         link = URL('ballot',args=(ballot.ballot_uuid,ballot.signature), scheme='http')
 
@@ -402,7 +400,7 @@ def vote():
                                   election_id=election.id,
                                   owner_email = election.created_by.email,
                                   title=election.title,signature=signature)
-        emailed = email_voter_and_managers(election,voter,ballot,body)
+        emailed = email_voter_and_manager(election,voter,ballot,body)
         session.flash = \
             T('Your vote was recorded and we sent you an email') \
             if emailed else \
@@ -425,7 +423,7 @@ def not_authorized():
 def no_more_ballots():
     return dict(message=T('Run out of ballots. Your vote was not recorded'))
 
-@auth.requires(auth.user and auth.user.is_manager)
+# @auth.requires(auth.user and auth.user.is_manager)
 # @auth.requires(auth.user)
 def voters_csv():
     election = db.election(request.args(0,cast=int,default=0),created_by=auth.user.id)

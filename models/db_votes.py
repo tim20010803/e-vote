@@ -2,8 +2,8 @@ NE = IS_NOT_EMPTY()
 
 maybe_can_choose = AS_SERVICE or DEVELOPMENT
 
-auth.settings.extra_fields['auth_user'] = [
-    Field('is_manager','boolean',default=True, writable=maybe_can_choose, readable=maybe_can_choose)]
+# auth.settings.extra_fields['auth_user'] = [
+#     Field('is_manager','boolean',default=True, writable=maybe_can_choose, readable=maybe_can_choose)]
 
 auth.define_tables(username=False, signature=False)
 
@@ -12,7 +12,7 @@ db.define_table(
     Field('title',requires=NE),
     Field('ballot_model','text',requires=NE), # empty ballot
     Field('voters','upload',requires=NE,autodelete=True),
-    Field('managers','text',requires=NE),
+    Field('manager','text',requires=NE,writable=False),
     Field('deadline','datetime'),
     Field('vote_email','text'),
     Field('voted_email','text'),
@@ -37,7 +37,6 @@ db.define_table(
     'ballot',
     Field('election_id',db.election),
     Field('ballot_content','text'),  # voted or blank ballot
-    Field('assigned','boolean',default=False),
     Field('voted','boolean',default=False),
     Field('voted_on','datetime',default=None),
     Field('results','json',default={}),

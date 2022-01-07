@@ -92,6 +92,7 @@ databases = get_databases(None)
 
 
 def eval_in_global_env(text):
+    # exec ('_ret=%s' % text,  global_env)
     exec ('_ret=%s' % text, {}, global_env)
     return global_env['_ret']
 
