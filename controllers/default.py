@@ -236,10 +236,14 @@ def compute_results(election):
 def results():
     id = request.args(0,cast=int) or redirect(URL('index'))
     election = db.election(id) or redirect(URL('index'))
-    if auth.user_id!=election.created_by and \
-            not(election.deadline and request.now>election.deadline):
+    # if auth.user_id!=election.created_by and \
+            # not(election.deadline and request.now>election.deadline):
+        # session.flash = T('Results not yet available')
+        # redirect(URL('index'))      
+    if not(election.deadline and request.now>election.deadline):
         session.flash = T('Results not yet available')
-        redirect(URL('index'))
+        redirect(URL('elections'))
+        
     response.subtitle = election.title + T(' / Results')
     if (DEBUG_MODE or not election.counters or
         not election.deadline or request.now<=election.deadline):
@@ -276,11 +280,19 @@ def email_voter_and_manager(election,voter,ballot,body):
                     subject='Receipt for %s' % election.title,
                     message=body,attachments=[attachment],
                     sender=sender)
+<<<<<<< HEAD
     mail.send(to=election.manager,
               subject='Copy of Receipt for %s' % election.title,
               message=body,
               attachments=[attachment],
               sender=sender)
+=======
+    # mail.send(to=regex_email.findall(election.managers),
+              # subject='Copy of Receipt for %s' % election.title,
+              # message=body,
+              # attachments=[attachment],
+              # sender=sender)
+>>>>>>> 737bfa38cbf81adde8e4946c7d8364a81a5ce023
     return ret
 
 def check_closed(election):
@@ -353,7 +365,7 @@ def ballot():
     if (not election.deadline or election.deadline>request.now) \
             and ballot.signature!=signature:
         session.flash = "your ballot is not visible until election is closed"
-        redirect(URL('index'))
+        redirect(URL('elections'))
     response.subtitle = election.title + T(' / Ballot')
     return dict(ballot=ballot,election=election)
 
@@ -402,8 +414,12 @@ def vote():
                              voted=True,voted_on=request.now)
         voter.update_record(voted=True)
         link = URL('ballot',args=(ballot.ballot_uuid,ballot.signature), scheme='http')
+<<<<<<< HEAD
 
         body = message_replace(voted_email_default,link=link,
+=======
+        body = message_replace(election.voted_email,link=link,
+>>>>>>> 737bfa38cbf81adde8e4946c7d8364a81a5ce023
                                   election_id=election.id,
                                   owner_email = election.created_by.email,
                                   title=election.title,signature=signature)
