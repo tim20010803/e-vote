@@ -16,6 +16,9 @@
         <tr>
           <td>
             <i class="icon-folder-close"></i>
+            {{if ballot.voter.voted:}}
+              {{="(voted)"}}
+            {{pass}}
             {{=ballot.election.title}} ({{=ballot.election.id}})
           </td>
           <td>
@@ -23,6 +26,8 @@
           </td>
           <td>
             <a class="btn" style="float:right" href="{{=URL('vote',args=(ballot.election.id,ballot.voter.voter_uuid))}}">Vote</a>
+            <a class="btn" style="float:right" >Ballot</a>
+            <a class="btn" style="float:right" href="{{=URL('results',args=(ballot.election.id,ballot.voter.voter_uuid))}}">Result</a>
           </td>
         </tr>
         {{pass}}
@@ -39,10 +44,10 @@
         <tr>
           <td>
             <i class="icon-folder-close"></i> {{=election.title}}
-            {{if election.deadline and election.deadline<request.now:}}
-            <span class="election-closed">closed</span>
+            {{if election.started:}}
+            <span class="election-closed"> started</span>
             {{else:}}
-            <span class="election-open">open</span>
+            <span class="election-open"> </span>
             {{pass}}
           </td>
           <td>
@@ -53,15 +58,21 @@
             <ul class="menu">
               <li><a class="btn">Action ▼</a>
                 <ul>
-	          {{if not election.closed:}}
-	          <!-- {{=LI(A(I(_class='icon-edit'),' ',T('Edit Election'),_href=URL('edit',args=election.id)))}} -->
-	          <!-- {{=LI(A(I(_class='icon-play-circle'),' ',T('Start Election'),_href=URL('start',args=election.id)))}} -->
-	          {{=LI(A(I(_class='icon-envelope'),' ',T('Send Reminder'),_href=URL('reminders',args=election.id)))}}
-	          {{=LI(A(I(_class='icon-off'),' ',T('Close Election'),_href=URL('close_election',args=election.id)))}}
-	          {{pass}}
-	          {{=LI(A(I(_class='icon-folder-open'),' ',T('Ballots'),_href=URL('ballots',args=election.id)))}}
-	          {{=LI(A(I(_class='icon-list'),' ',T('Results'),_href=URL('results',args=election.id)))}}
-	          {{=LI(A(I(_class='icon-download'),' ',T('CSV Voters'),_href=URL('voters_csv.csv',args=election.id)))}}
+            {{if not election.started:}}
+            {{=LI(A(I(_class='icon-edit'),' ',T('Edit Election'),_href=URL('edit',args=election.id)))}}
+            {{=LI(A(I(_class='icon-play-circle'),' ',T('Start Election'),_href=URL('start',args=election.id)))}}
+            {{=LI(A(I(_class='icon-play-circle'),' ',T('Delete Election'),_href=URL('delete_election',args=election.id)))}}
+
+            {{elif not election.closed:}}
+            {{=LI(A(I(_class='icon-folder-open'),' ',T('Ballots'),_href=URL('ballots',args=election.id)))}}
+            {{=LI(A(I(_class='icon-envelope'),' ',T('Send Reminder'),_href=URL('reminders',args=election.id)))}}
+            {{=LI(A(I(_class='icon-off'),' ',T('Close Election'),_href=URL('close_election',args=election.id)))}}
+
+            {{else:}}
+            {{=LI(A(I(_class='icon-folder-open'),' ',T('Ballots'),_href=URL('ballots',args=election.id)))}}
+            {{=LI(A(I(_class='icon-list'),' ',T('Results'),_href=URL('results',args=election.id)))}}
+            {{=LI(A(I(_class='icon-download'),' ',T('CSV Voters'),_href=URL('voters_csv.csv',args=election.id)))}}
+            {{pass}}
                 </ul>
               </li>
             </ul>

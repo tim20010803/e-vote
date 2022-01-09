@@ -10,8 +10,7 @@ def elections():
     response.subtitle = T('My Elections')
     elections = db(db.election.created_by==auth.user.id).select(
         orderby=~db.election.created_on)
-    ballots = db(db.voter.email == auth.user.email)(
-        db.voter.voted==False)(db.voter.election_id==db.election.id)(
+    ballots = db(db.voter.email == auth.user.email)(db.voter.election_id==db.election.id)(
         (db.election.deadline==None)|(db.election.deadline>request.now)).select()
     return dict(elections=elections,ballots=ballots)
 
@@ -24,7 +23,7 @@ def edit():
         redirect(URL('not_authorized'))
     if not election:
         (pubkey, privkey) = rsakeys()
-        # db.election.voters.default = auth.user.email
+        db.election.voters.default = auth.user.email
         db.election.manager.default = auth.user.email
         db.election.public_key.default = pubkey
         db.election.private_key.default = privkey
@@ -107,6 +106,8 @@ def start_callback():
                 failures.append(to)
         if not failures:
             session.flash = T('Emails sent successfully')
+            print("election started!!!!----------------------" )
+            election.update_record(started=True)
             redirect(URL('elections'),client_side=True)
     return dict(form=form,failures=failures,election=election)
 
@@ -292,8 +293,7 @@ def check_closed(election):
         session.flash = T('Election already closed')
         redirect(URL('elections'))
 
-# @auth.requires(auth.user and auth.user.is_manager)
-# @auth.requires(auth.user)
+
 def close_election():
     import zipfile, os
     election = db.election(request.args(0,cast=int)) or \
@@ -359,7 +359,18 @@ def ballot():
         session.flash = "your ballot is not visible until election is closed"
         redirect(URL('elections'))
     response.subtitle = election.title + T(' / Ballot')
-    return dict(ballot=ballot,election=election)
+    return dict(ballot_uuid=ballot_uuid,ballot=ballot,election=election)
+
+
+def delete_election():
+    election = db.election(request.args(0,cast=int,default=0))
+    dialog = FORM.confirm(T('Delete'),{T('Cancel'):URL('elections')})
+    if dialog.accepted:
+        db(db.voter.election_id==election.id).delete()
+        db(db.ballot.election_id==election.id).delete()
+        db(db.election.id==election.id).delete()
+        redirect(URL('elections'))
+    return dict(dialog=dialog,election=election)
 
 def recorded():
     return dict()

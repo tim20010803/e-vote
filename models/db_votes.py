@@ -22,6 +22,7 @@ db.define_table(
     Field('private_key','text',writable=False,readable=False),
     Field('counters','json',writable=False,readable=False),
     Field('closed','boolean',writable=False,readable=False),
+    Field('started','boolean',writable=False,readable=False),
     auth.signature,
     format='%(title)s')
 
