@@ -55,8 +55,8 @@
               <li><a class="btn">Action ▼</a>
                 <ul>
 	          {{if not election.closed:}}
-	          <!-- {{=LI(A(I(_class='icon-edit'),' ',T('Edit Election'),_href=URL('edit',args=election.id)))}} -->
-	          <!-- {{=LI(A(I(_class='icon-play-circle'),' ',T('Start Election'),_href=URL('start',args=election.id)))}} -->
+	          {{=LI(A(I(_class='icon-edit'),' ',T('Edit Election'),_href=URL('edit',args=election.id)))}}
+	          {{=LI(A(I(_class='icon-play-circle'),' ',T('Start Election'),_href=URL('start',args=election.id)))}}
 	          {{=LI(A(I(_class='icon-envelope'),' ',T('Send Reminder'),_href=URL('reminders',args=election.id)))}}
 	          {{=LI(A(I(_class='icon-off'),' ',T('Close Election'),_href=URL('close_election',args=election.id)))}}
 	          {{pass}}
