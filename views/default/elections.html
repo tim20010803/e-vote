@@ -26,7 +26,7 @@
           </td>
           <td>
             <a class="btn" style="float:right" href="{{=URL('vote',args=(ballot.election.id,ballot.voter.voter_uuid))}}">Vote</a>
-            <a class="btn" style="float:right" >Ballot</a>
+            <a class="btn" style="float:right" href="{{=URL('ballots',args=(ballot.election.id))}}">Ballots</a>
             <a class="btn" style="float:right" href="{{=URL('results',args=(ballot.election.id,ballot.voter.voter_uuid))}}">Result</a>
           </td>
         </tr>
