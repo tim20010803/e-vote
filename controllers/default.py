@@ -93,7 +93,8 @@ def start_callback():
                                       link=link_vote,
                                       link_ballots=link_ballots,
                                       link_results=link_results)
-            body=election.comments_vote_email+"\n"+body
+            if election.comments_not_voted_email!= None:
+                body=election.comments_vote_email+"\n"+body
             print(body)
             subject = '%s [%s]' % (election.title, election.id)
             emails.append((voter,email,subject,body))
@@ -320,7 +321,8 @@ def close_election():
                                       owner_email = owner_email,
                                       title=election.title,
                                       signature=ballot.signature,link=link)
-            body=election.comments_not_voted_email+"\n"+body
+            if election.comments_not_voted_email!= None:
+                body=election.comments_not_voted_email+"\n"+body
             print(body)
             email_voter_and_manager(election,voter,ballot,body)
         compute_results(election)
@@ -422,7 +424,8 @@ def vote():
                                   election_id=election.id,
                                   owner_email = election.created_by.email,
                                   title=election.title,signature=signature)
-        body=election.comments_voted_email+"\n"+body
+        if election.comments_voted_email!= None:          
+            body=election.comments_voted_email+"\n"+body
         print(body)
         emailed = email_voter_and_manager(election,voter,ballot,body)
         session.flash = \
