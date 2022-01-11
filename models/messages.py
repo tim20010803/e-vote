@@ -34,7 +34,7 @@ db.election.ballot_model.default = """
 </table>
 """
 
-db.election.vote_email.default = """
+vote_email_default = """
 {{=title}}
 
 Link to vote: {{=link}}
@@ -42,7 +42,7 @@ Link to ballots: {{=link_ballots}}
 Link to results: {{=link_results}}
 """
 
-db.election.voted_email.default = """
+voted_email_default = """
 {{=title}}
 
 You have voted and your vote has been registered. Thank you!
@@ -54,7 +54,7 @@ A copy is also attached.
 Please keep it to verify the integrity of the election.
 """
 
-db.election.not_voted_email.default = """
+not_voted_email_default = """
 {{=title}}
 
 Your ballot: {{=link}}
