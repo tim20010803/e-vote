@@ -12,7 +12,9 @@ def elections():
         orderby=~db.election.created_on)
     ballots = db(db.voter.email == auth.user.email)(db.voter.election_id==db.election.id)(
         (db.election.deadline==None)|(db.election.deadline>request.now)).select()
-    return dict(elections=elections,ballots=ballots)
+    ended_elections = db(db.voter.email == auth.user.email)(db.voter.election_id==db.election.id)(
+        (db.election.deadline<request.now)).select()
+    return dict(elections=elections,ballots=ballots,ended_elections=ended_elections)
 
 # @auth.requires(auth.user and auth.user.is_manager)
 # @auth.requires(auth.user)
@@ -29,7 +31,13 @@ def edit():
         db.election.private_key.default = privkey
     form = SQLFORM(db.election,election,deletable=True,
                    submit_button="Save and Preview").process()
-    if form.accepted: redirect(URL('start',args=form.vars.id))
+    if form.accepted:
+        if len(form.vars.ballot_model)==2:
+            session.flash = T('Please add a new voting question!')
+            redirect(URL('edit',args=form.vars.id))
+        else :
+            print(form.vars.ballot_model)
+            redirect(URL('start',args=form.vars.id))
     return dict(form=form)
 
 # @auth.requires(auth.user and auth.user.is_manager)
@@ -424,7 +432,7 @@ def vote():
                                   election_id=election.id,
                                   owner_email = election.created_by.email,
                                   title=election.title,signature=signature)
-        if election.comments_voted_email!= None:          
+        if election.comments_voted_email!= None:
             body=election.comments_voted_email+"\n"+body
         print(body)
         emailed = email_voter_and_manager(election,voter,ballot,body)
@@ -457,13 +465,13 @@ def voters_csv():
     return db(db.voter.election_id==election.id).select(
         db.voter.election_id,db.voter.email,db.voter.voted).as_csv()
 
-def features():
-    return locals()
+# def features():
+#     return locals()
 
-def support():
-    return locals()
+# def support():
+#     return locals()
 
-def contactus():
+def workflow():
     return locals()
 
 def upload_voters():
