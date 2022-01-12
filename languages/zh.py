@@ -171,6 +171,7 @@
 'next 100 rows': '往後 100 筆',
 'NO': '否',
 'No databases in this application': '這應用程式不含資料庫',
+'Not Authorized': 'Not Authorized',
 'Object or table name': 'Object or table name',
 'Old password': 'Old password',
 'Online examples': '點此處進入線上範例',
