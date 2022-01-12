@@ -238,6 +238,7 @@
 'This is the %(filename)s template': '這是%(filename)s檔案的樣板(template)',
 'Ticket': '問題單',
 'Timestamp': '時間標記',
+'Too short': 'Too short',
 'Total Ballots/Voters:': 'Total Ballots/Voters:',
 'Type anything you want to say with non-voters': 'Type anything you want to say with non-voters',
 'Type anything you want to say with voting receipt': 'Type anything you want to say with voting receipt',
