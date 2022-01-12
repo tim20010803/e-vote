@@ -1,7 +1,6 @@
 from ballot import ballot2form, form2ballot, blank_ballot, sign, uuid, regex_email, rsakeys
 import re
 import json
-from threading import Timer
 def index():
     return dict()
 
@@ -15,9 +14,9 @@ def elections():
     ended_elections = db(db.voter.email == auth.user.email)(db.voter.election_id==db.election.id)(
         (db.election.deadline<request.now)).select()
     for election in elections:
-        if election.deadline and (election.deadline) < request.now and election.closed==False:
+        if election.deadline and (election.deadline) < request.now and not election.closed:
+            db(db.election.deadline < request.now).update(closed=True)
             print("cl")
-            print(db(db.election.deadline < request.now).update(closed=True))
     return dict(elections=elections,ballots=ballots,ended_elections=ended_elections)
 
 # @auth.requires(auth.user and auth.user.is_manager)
@@ -27,6 +26,10 @@ def edit():
     election = db.election(request.args(0,cast=int,default=0))
     if election and not election.created_by==auth.user_id:
         redirect(URL('not_authorized'))
+    elif election and election.started:
+        session.flash = T('Election has started and you should not be here!')
+        redirect(URL('invalid_link'))
+
     if not election:
         (pubkey, privkey) = rsakeys()
         db.election.voters.default = auth.user.email
@@ -38,6 +41,9 @@ def edit():
     if form.accepted:
         if len(form.vars.ballot_model)==2:
             session.flash = T('Please add a new voting question!')
+            redirect(URL('edit',args=form.vars.id))
+        elif form.vars.deadline<request.now:
+            session.flash = T('Deadline cannot set in past')
             redirect(URL('edit',args=form.vars.id))
         else :
             print(form.vars.ballot_model)
@@ -104,7 +110,8 @@ def start_callback():
                                       title=election.title,
                                       link=link_vote,
                                       link_ballots=link_ballots,
-                                      link_results=link_results)
+                                      link_results=link_results,
+                                      deadline=election.deadline)
             if election.comments_not_voted_email!= None:
                 body=election.comments_vote_email+"\n"+body
             print(body)
@@ -147,7 +154,8 @@ def self_service():
                                       title=election.title,
                                       link=link_vote,
                                       link_ballots=link_ballots,
-                                      link_results=link_results)
+                                      link_results=link_results,
+                                      deadline=election.deadline)
             body=body+"\n"+election.comments_vote_email
             print(body)
             sender = election.email_sender or mail.settings.sender
@@ -189,7 +197,8 @@ def reminders_callback():
                                       title=election.title,
                                       link=link,
                                       link_ballots=link_ballots,
-                                      link_results=link_results)
+                                      link_results=link_results,
+                                      deadline=election.deadline)
             body=election.comments_vote_email+"\n"+body
             print(body)
             subject = '%s [%s]' % (election.title, election.id)
@@ -435,7 +444,8 @@ def vote():
         body = message_replace(voted_email_default,link=link,
                                   election_id=election.id,
                                   owner_email = election.created_by.email,
-                                  title=election.title,signature=signature)
+                                  title=election.title,signature=signature,
+                                  deadline=election.deadline)
         if election.comments_voted_email!= None:
             body=election.comments_voted_email+"\n"+body
         print(body)

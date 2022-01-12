@@ -40,6 +40,9 @@ vote_email_default = """
 Link to vote: {{=link}}
 Link to ballots: {{=link_ballots}}
 Link to results: {{=link_results}}
+
+The election will end at :{{=deadline}}
+
 """
 
 voted_email_default = """
@@ -50,6 +53,8 @@ Here is your ballot.
 
 Your ballot: {{=link}}
 A copy is also attached.
+
+The election will end at :{{=deadline}}
 
 Please keep it to verify the integrity of the election.
 """
