@@ -22,12 +22,12 @@
       <div id="target-ballot" style="background-color:#f1f1f1">
         <div v-for="(question, q) in questions">
           <div>
-            <textarea style="border: 2px solid #f1f1f1" 
+            <textarea style="border: 2px solid #f1f1f1"
                       v-model="question.preamble"></textarea>
           </div>
-          <div style="padding-left:50px">   
-		  
-			<p>Algorithm:simple-majority</p>			
+          <div style="padding-left:50px">
+
+			<p>Algorithm:simple-majority</p>
             <!-- <label>Algorithm</label> -->
             <!-- <select v-model="question.type" style="width:200px"> -->
               <!-- <option v-for="algorithm in algorithms" -->
@@ -46,7 +46,7 @@
                 <td><button v-on:click.prevent="delete_question(q)">delete question</button></td>
               </tr>
               </tbody>
-            </table>            
+            </table>
           </div>
         </div>
         <center>
@@ -69,9 +69,9 @@
   </div>
   <div class="half">
     <div class="padded">
-      <h5>{{=T('Managers')}}</h5>
-      <p>{{=T('List of emails of election managers')}}</p>
-      {{=form.custom.widget.managers}}
+      <h5>{{=T('Manager')}}</h5>
+      <p>{{=T('Emails of election manager')}}</p>
+      {{=form.custom.widget.manager}}
     </div>
   </div>
 </div>
@@ -87,26 +87,21 @@
 <div class="container max900">
   <div class="fill">
     <div class="padded">
-      <h5>{{=T('Text of email with voting link')}}</h5>
-      {{=form.custom.widget.vote_email}}
+      <h5>{{=T('Type you anything you want to say with voting link')}}</h5>
+      {{=form.custom.widget.comments_vote_email}}
     </div>
     <div class="padded">
-      <h5>{{=T('Text of email for voting receipt')}}</h5>
-      {{=form.custom.widget.voted_email}}
+      <h5>{{=T('Type anything you want to say with voting receipt')}}</h5>
+      {{=form.custom.widget.comments_voted_email}}
     </div>
     <div class="padded">
-      <h5>{{=T('Text of email for non-voters')}}</h5>
-      {{=form.custom.widget.not_voted_email}}
+      <h5>{{=T('Type anything you want to say with non-voters')}}</h5>
+      {{=form.custom.widget.comments_not_voted_email}}
     </div>
     <div class="padded">
       <h5>{{=T('Email sender')}}</h5>
       {{=form.custom.widget.email_sender}}
     </div>
-    {{if form.custom.deletable:}}
-    <div class="padded">
-      <h5>{{=T('Delete?')}} {{=form.custom.deletable}}</h5>
-    </div>
-    {{pass}}  
     <div class="padded">
       {{=form.custom.submit}}
       {{=form.custom.end}}
