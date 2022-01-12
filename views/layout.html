@@ -11,26 +11,26 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css">
     {{include "web2py_ajax.html"}}
   </head>
-  <body class="black">   
-    <!-- {{if response.flash:}}
+  <body class="black">
+    {{if response.flash:}}
     <div class="w2p_flash">
       {{=response.flash}}
     </div>
-    {{pass}} -->
+    {{pass}}
     <header>
       <a href="{{=URL('default','elections.html')}}">Elctions</a>
     </header>
-    <main class="white"> 
+    <main class="white">
       {{include}}
     </main>
      <footer class="black">
       <div class="silver center padded social" style="background-color: black;">
       </div>
-    </footer> 
-  </body>  
+    </footer>
+  </body>
 
   <script src="{{=URL('static','js/jquery-sortable.js')}}"></script>
-  <script src="{{=URL('static','js/evote.js')}}"></script>  
+  <script src="{{=URL('static','js/evote.js')}}"></script>
   <script>
     jQuery('.social a').each(function(){var t=jQuery(this); t.attr('href',t.attr('href').replace('{url}',encodeURIComponent(window.location.href)));});
   </script>

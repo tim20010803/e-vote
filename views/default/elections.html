@@ -34,27 +34,6 @@
       {{else:}}
       <h4>No elections require your vote</h4>
       {{pass}}
-      <h4>Ended Elections </h4>
-      {{if ballots:}}
-      <table class="fill">
-        {{for ended_election in ended_elections:}}
-        <tr>
-          <td>
-            <i class="icon-folder-close"></i>
-            {{if ended_election.voter.voted:}} {{="(voted)"}} {{pass}}
-            {{=ended_election.election.title}} ({{=ended_election.election.id}})
-          </td>
-          <td>
-            Created on {{=ended_election.election.created_on}}
-          </td>
-          <td>
-            <a class="btn" style="float:right" href="{{=URL('ballots',args=(ended_election.election.id))}}">Ballots</a>
-            <a class="btn" style="float:right" href="{{=URL('results',args=(ended_election.election.id,ended_election.voter.voter_uuid))}}">Result</a>
-          </td>
-        </tr>
-        {{pass}}
-      </table>
-      {{pass}}
 
       {{if elections:}}
       <h4>Elections managed by you</h4>
@@ -106,6 +85,29 @@
       {{else:}}
       <h4>There are no elections managed by you</h4>
       {{pass}}
+
+      <h4>Ended Elections </h4>
+      {{if ballots:}}
+      <table class="fill">
+        {{for ended_election in ended_elections:}}
+        <tr>
+          <td>
+            <i class="icon-folder-close"></i>
+            {{if ended_election.voter.voted:}} {{="(voted)"}} {{pass}}
+            {{=ended_election.election.title}} ({{=ended_election.election.id}})
+          </td>
+          <td>
+            Created on {{=ended_election.election.created_on}}
+          </td>
+          <td>
+            <a class="btn" style="float:right" href="{{=URL('ballots',args=(ended_election.election.id))}}">Ballots</a>
+            <a class="btn" style="float:right" href="{{=URL('results',args=(ended_election.election.id,ended_election.voter.voter_uuid))}}">Result</a>
+          </td>
+        </tr>
+        {{pass}}
+      </table>
+      {{pass}}
+
     </div>
   </div>
 </div>

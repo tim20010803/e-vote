@@ -1,7 +1,7 @@
 from ballot import ballot2form, form2ballot, blank_ballot, sign, uuid, regex_email, rsakeys
 import re
 import json
-
+from threading import Timer
 def index():
     return dict()
 
@@ -14,6 +14,10 @@ def elections():
         (db.election.deadline==None)|(db.election.deadline>request.now)).select()
     ended_elections = db(db.voter.email == auth.user.email)(db.voter.election_id==db.election.id)(
         (db.election.deadline<request.now)).select()
+    for election in elections:
+        if election.deadline and (election.deadline) < request.now and election.closed==False:
+            print("cl")
+            print(db(db.election.deadline < request.now).update(closed=True))
     return dict(elections=elections,ballots=ballots,ended_elections=ended_elections)
 
 # @auth.requires(auth.user and auth.user.is_manager)
