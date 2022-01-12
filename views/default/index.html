@@ -1,44 +1,77 @@
 {{extend 'layout.html'}}
 
-<div class="container max900">
-  <div class="fill center spaced">
-    <h3>Free Secure Trusted Verifiable Online Voting</h3>
-  </div>
-</div>
-<div class="container max900">
-  <div class="quarter">
-    <div class="padded">
-      <strong>Easy to Use</strong>
-      <p style="text-align:left; line-height:1.5em">You can create one or many polls/elections per ballot. Simple Counting, Instant Run-Off, and Schulze Algorithms.
-        <a href="{{=URL('features')}}">Learn more&nbsp;&raquo;</a>
-      </p>
-    </div>
-  </div>
-  
-  <div class="quarter">
-    <div class="padded">
-      <strong>Security Engine</strong>
-      <p style="text-align:left; line-height:1.5em">We run the polls/elections online in an anonymous and verifiable manner using the latest security technologies.
-    <a href="{{=URL('features')}}">Learn more&nbsp;&raquo;</a>
-      </p>
-    </div>
-  </div>
 
-  <div class="quarter">
-    <div class="padded">
-      <strong>Email Notifications</strong>
-      <p style="text-align:left; line-height:1.5em">Voting links, reminders, receipts, and notifications are sent by emails. 
-        <a href="{{=URL('features')}}">Learn more&nbsp;&raquo;</a>
-      </p>
-    </div>
-  </div>
 
-  <div class="quarter">
-    <div class="padded">
-      <strong>Quick Interaction</strong>
-      <p style="text-align:left; line-height:1.5em">One click actions make the voting process simple without need to create accounts or navigate multiple pages.
-        <a href="{{=URL('features')}}">Learn more&nbsp;&raquo;</a>
-      </p>
+<div id="wrapper" class="divided">
+  <section class="banner1">
+
+    <div class="content">
+      <h1>Anonymous Voting</h1>
+      <p class="major">This is a an annonymous system that can build a online election and ....XXXXXXXXXXXXXXXX</p>
+      <h5>
+        <ul class="actions vertical" id="test">
+          <li><a href=#user_auth class="button big wide smooth-scroll-middle", style="color:black;">Get Started</a></li>
+        </ul>
+      </h5>
     </div>
-  </div>
+
+    <div class="image" >
+      <ul class="menu right" style="margin-right:50px; margin-top:15; color: black;" >
+        <li >
+          {{=auth.navbar(mode='dropdown')}}
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="banner2" id="user_auth">
+      <div class="auth_button_div" id="auth_button_1">
+        <input class="img_button1" type="submit" value="" onclick="window.location='/evote/default/user/login?_next=/evote/default/index;'">
+      </div>
+      <div class="auth_button_div" id="auth_button_2">
+        <input class="img_button2" type="submit" value="" onclick="window.location='/evote/default/user/register?_next=/evote/default/index';">
+      </div>
+
+  </section>
+
+  <section class="banner3" id="vote_Info">
+    <div class="inner">
+      <h2>Some Info</h2>
+      <!-- <p>maybe we can type some text here</p> -->
+    </div>
+    <div class="info detail"> 
+      <section>
+        <div class="icon1" >
+          <h3><a href="{{=URL('default','workflow.html')}}">WorkFlow Detail</a></h3>
+          <div class="icon_content">
+            <p><strong>Here are some instruction and workflow of this annonymous voting system, where will describe how to use this system</p>
+        </div>
+        </div>
+        
+      </section>
+
+      <section>
+        <div class="icon2">
+          <h3>Developoer</h3>
+          <div class="icon_content">
+            <p><a href=""></a>source code</p>
+            <div id="icon2_content_1">
+              <p>author1:b07505035</p>
+              <p>author2:b07505035</p>
+            </div>
+            <div id="icon2_content_2">
+              <p>author1:b07505035</p>
+              <p>author2:b07505035</p>
+            </div>
+          </div>
+        </div>
+
+      </section>
+    </div>
+    
+  </section>
+
 </div>
+
+
+

@@ -435,13 +435,13 @@ def voters_csv():
     return db(db.voter.election_id==election.id).select(
         db.voter.election_id,db.voter.email,db.voter.voted).as_csv()
 
-def features():
-    return locals()
+# def features():
+#     return locals()
 
-def support():
-    return locals()
+# def support():
+#     return locals()
 
-def contactus():
+def workflow():
     return locals()
 
 def upload_voters():
