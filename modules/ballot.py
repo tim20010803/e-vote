@@ -32,7 +32,7 @@ def sign(text,privkey_pem):
         signature = base64.b16encode(rsa.sign(text.encode(),privkey,'SHA-256'))
     return signature
 
-def ballot2form(ballot_model, readonly=False, vars=None, counters=None):
+def ballot2form(ballot_model, readonly=False, vars=None, counters=None, closed=None):
     """If counters is passed this counts the results in the ballot.
     If readonly is False, then the voter has not yet voted; if readonly
     is True, then they have just voted."""
@@ -40,7 +40,7 @@ def ballot2form(ballot_model, readonly=False, vars=None, counters=None):
     # ballot_model is a str????
     ballot_structure = json.loads(ballot_model)
     ballot = FORM()
-    closed=db(db.election.ballot_model==ballot_model).select()[0].closed
+    # closed=db(db.election.ballot_model==ballot_model).select()[0].closed
 
     for question in ballot_structure:
         div =DIV(_class="question")

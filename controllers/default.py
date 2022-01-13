@@ -42,7 +42,7 @@ def edit():
         if len(form.vars.ballot_model)==2:
             session.flash = T('Please add a new voting question!')
             redirect(URL('edit',args=form.vars.id))
-        elif form.vars.deadline<request.now:
+        elif form.vars.deadline and form.vars.deadline<request.now:
             session.flash = T('Deadline cannot set in past')
             redirect(URL('edit',args=form.vars.id))
         else :
@@ -271,7 +271,9 @@ def results():
     if (DEBUG_MODE or not election.counters or
         not election.deadline or request.now<=election.deadline):
         compute_results(election)
-    form = ballot2form(election.ballot_model, counters=election.counters)
+    # closed=db(db.election.ballot_model==ballot_model).select()[0].closed
+
+    form = ballot2form(election.ballot_model, counters=election.counters, closed=election.closed)
     return dict(form=form,election=election)
 
 def hash_ballot(text):
