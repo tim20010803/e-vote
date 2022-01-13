@@ -25,50 +25,47 @@
   </section>
 
   <section class="banner2" id="user_auth">
-      <div class="auth_button_div" id="auth_button_1">
-        <input class="img_button1" type="submit" value="" onclick="window.location='/evote/default/user/login?_next=/evote/default/index;'">
-      </div>
-      <div class="auth_button_div" id="auth_button_2">
-        <input class="img_button2" type="submit" value="" onclick="window.location='/evote/default/user/register?_next=/evote/default/index';">
-      </div>
-
-  </section>
-
-  <section class="banner3" id="vote_Info">
-    <div class="inner">
-      <h2>Some Info</h2>
-      <!-- <p>maybe we can type some text here</p> -->
-    </div>
-    <div class="info detail"> 
-      <section>
-        <div class="icon1" >
-          <h3><a href="{{=URL('default','workflow.html')}}">WorkFlow Detail</a></h3>
-          <div class="icon_content">
-            <p><strong>Here are some instruction and workflow of this annonymous voting system, where will describe how to use this system</p>
-        </div>
-        </div>
-        
-      </section>
-
-      <section>
-        <div class="icon2">
-          <h3>Developoer</h3>
-          <div class="icon_content">
-            <p><a href=""></a>source code</p>
-            <div id="icon2_content_1">
-              <p>author1:b07505035</p>
-              <p>author2:b07505035</p>
-            </div>
-            <div id="icon2_content_2">
-              <p>author1:b07505035</p>
-              <p>author2:b07505035</p>
-            </div>
+      <div class="auth_button_div">
+        <div class="icon0">
+          <h3>Try Now!</h3>
+          <div class="useful_button">
+            <button class="img_button" role="button" onclick="window.location.href='elections.html'">Go Election</button>
+          </div>
+          <div class="useful_button">
+            <button class="img_button" role="button" onclick="window.location='/evote/default/user/register?_next=/evote/default/index;'">Create Account</button>
           </div>
         </div>
+      </div>
 
-      </section>
-    </div>
-    
+      <div class="auth_button_div" id="auth_button_1">
+        <div class="icon1" >
+          <h3>WorkFlow</h3>
+          <div class="icon1_content">
+            <p>Here are some user guide and workflow of this annonymous voting system, where will describe how to use this system</p>
+          </div>
+          <div class="useful_button">
+            <button class="img_button" role="button" onclick="window.location.href='workflow.html'">Learn More</button>
+          </div>
+        </div>
+      </div>
+      <div class="auth_button_div" id="auth_button_2">
+          <div class="icon2">
+            <h3>Dev Info</h3>
+            <div class="icon2_content">
+                <p>author:b07505035</p>
+                <p>author:b07505035</p>
+                <p>author:b07505035</p>
+                <p>author:b07505035</p>
+
+            </div>
+            <div class="useful_button">
+              <button class="img_button" role="button" onclick="window.location.href='https://github.com/tim20010803/evote'">Source Code</button>
+            </div>
+          </div>
+      </div>
+
+      
+
   </section>
 
 </div>
