@@ -32,10 +32,10 @@ def sign(text,privkey_pem):
         signature = base64.b16encode(rsa.sign(text.encode(),privkey,'SHA-256'))
     return signature
 
-def ballot2form(ballot_model, readonly=False, vars=None, counters=None):    
+def ballot2form(ballot_model, readonly=False, vars=None, counters=None):
     """If counters is passed this counts the results in the ballot.
     If readonly is False, then the voter has not yet voted; if readonly
-    is True, then they have just voted."""    
+    is True, then they have just voted."""
     # ballot_model = [{"preamble":"","answers":["A","V","X"],"algorithm":"simple-majority","randomize":true,"comments":false,"name":"321331244310","type":"simple-majority"}]
     # ballot_model is a str????
     ballot_structure = json.loads(ballot_model)
@@ -51,6 +51,7 @@ def ballot2form(ballot_model, readonly=False, vars=None, counters=None):
         if counters:    #如果counters是None，表示選舉還沒結束
             options = []
             # print(question['algorithm'],"喔喔喔")
+            print("counters",counters)
             for answer in question['answers']:
                 key = name+ '/'+question['algorithm']+'/' +answer
                 options.append((counters.get(key,0), answer))
@@ -63,26 +64,28 @@ def ballot2form(ballot_model, readonly=False, vars=None, counters=None):
                 random.shuffle(options)
         for answer in options:
             key = name + '/'+question['algorithm']+'/' + answer
-            if not counters:
-                # print(question['algorithm'],"喔喔ㄚㄚㄚ")
-                if question['algorithm'] == 'simple-majority':
-                    inp = INPUT(_name=question['name'], _type="radio", _value=answer)
-                # if question['algorithm'] == 'aaasimple-majority':
-                    # inp = INPUT(_name=question['name'], _type="radio", _value=answer)
-                if vars and vars.get(name) == answer:
-                    inp['_checked'] = True
-                if readonly:
-                    inp['_disabled'] = True
-            else:
-                inp = STRONG(counters.get(key, 0))
+            # if not counters:
+            #     print(question['algorithm'],"喔喔ㄚㄚㄚ")
+            #     if question['algorithm'] == 'simple-majority':
+            #         inp = INPUT(_name=question['name'], _type="radio", _value=answer)
+            #     # if question['algorithm'] == 'aaasimple-majority':
+            #         # inp = INPUT(_name=question['name'], _type="radio", _value=answer)
+            #     if vars and vars.get(name) == answer:
+            #         inp['_checked'] = True
+            #     if readonly:
+            #         inp['_disabled'] = True
+            # else:
+            #     inp = STRONG(counters.get(key, 0))
+            inp = STRONG(counters.get(key, 0))
             table.append(TR(TD(inp),TD(answer)))
         if question['comments']:
             value = readonly and vars.get(question['name']+'_comments') or ''
             textarea =  TEXTAREA(value, _disabled=readonly, _name=question['name']+'_comments')
             ballot.append(DIV(H4('Comments'), textarea))
-    if not readonly and not counters:
-        ballot.append(INPUT(_type='submit', _value="Submit Your Ballot!"))
+    # if not readonly and not counters:
+    #     ballot.append(INPUT(_type='submit', _value="Submit Your Ballot!"))
     return ballot
+
 
 def form2ballot(ballot_model, token, vars, results):
     ballot_content = ballot2form(ballot_model, readonly=True, vars=vars).xml().decode("utf-8")
