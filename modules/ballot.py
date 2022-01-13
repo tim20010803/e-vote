@@ -40,6 +40,8 @@ def ballot2form(ballot_model, readonly=False, vars=None, counters=None):
     # ballot_model is a str????
     ballot_structure = json.loads(ballot_model)
     ballot = FORM()
+    closed=db(db.election.ballot_model==ballot_model).select()[0].closed
+
     for question in ballot_structure:
         div =DIV(_class="question")
         ballot.append(div)
@@ -48,7 +50,8 @@ def ballot2form(ballot_model, readonly=False, vars=None, counters=None):
         table = TABLE()
         div.append(table)
         name = question['name']
-        if counters:    #如果counters是None，表示選舉還沒結束
+        # print(ballot_model)
+        if counters and closed:    #如果counters是None，表示選舉還沒結束
             options = []
             # print(question['algorithm'],"喔喔喔")
             print("counters",counters)
@@ -58,10 +61,12 @@ def ballot2form(ballot_model, readonly=False, vars=None, counters=None):
                 # print(options)
             options.sort(reverse=True)
             options = map(lambda a: a[1], options)
+            print("if option ",options)
         else:
             options = question['answers']
             if question['randomize']:
                 random.shuffle(options)
+            print("else option ",options)
         for answer in options:
             key = name + '/'+question['algorithm']+'/' + answer
             # if not counters:
@@ -76,14 +81,19 @@ def ballot2form(ballot_model, readonly=False, vars=None, counters=None):
             #         inp['_disabled'] = True
             # else:
             #     inp = STRONG(counters.get(key, 0))
-            inp = STRONG(counters.get(key, 0))
+            # print("count",counters)
+            if closed:
+                inp = STRONG(counters.get(key, 0))
+            else:
+                inp = INPUT(_name=question['name'], _type="radio", _value=answer)
+
             table.append(TR(TD(inp),TD(answer)))
         if question['comments']:
             value = readonly and vars.get(question['name']+'_comments') or ''
             textarea =  TEXTAREA(value, _disabled=readonly, _name=question['name']+'_comments')
             ballot.append(DIV(H4('Comments'), textarea))
-    # if not readonly and not counters:
-    #     ballot.append(INPUT(_type='submit', _value="Submit Your Ballot!"))
+    if not readonly and not closed:
+        ballot.append(INPUT(_type='submit', _value="Submit Your Ballot!"))
     return ballot
 
 
