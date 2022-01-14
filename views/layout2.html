@@ -7,6 +7,7 @@
     <link href="{{=URL('static','css/stupid.css')}}" rel="stylesheet" type="text/css"/>
     <link href="{{=URL('static','css/calendar.css')}}" rel="stylesheet" type="text/css"/>
     <link href="{{=URL('static','css/web2py.css')}}" rel="stylesheet" type="text/css"/>
+    <link href="{{=URL('static','css/layout2.css')}}" rel="stylesheet" type="text/css"/>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css">
     {{include "web2py_ajax.html"}}
   </head>
@@ -16,24 +17,34 @@
       {{=response.flash}}
     </div>
     {{pass}}
-    <header class="padded" style="height: 10%;">
-      <ul class="menu right" style="margin-right:50px; margin-top:15; color: black;" >
+    <div class="header_menu" style=" padding-top:15px">
+      <div class="header_menu_cell">
+        <button class="menu_button" role="button" onclick="window.location.href='{{=URL('default','index.html')}}'">Home</button>
+      </div>
+      <div class="header_menu_cell">
+        <button class="menu_button" role="button" onclick="window.location.href='{{=URL('default','elections.html')}}'">Manage</button>
+      </div>
+      <div class="header_menu_cell">
+        <button class="menu_button" role="button" onclick="window.location.href='{{=URL('default','workflow.html')}}'">Workflow</button>
+      </div>
+    </div>
+    <header class="padded" style="height: 8%;">
+      <ul class="menu right" style="margin-right:50px; margin-top:5;  color: black;" >
         <li >
           {{=auth.navbar(mode='dropdown')}}
         </li>
       </ul>
-      <div class="header_menu" style="margin-top:15;">
-        <a href="{{=URL('default','index.html')}}" >Home</a>
-        <a href="{{=URL('default','elections.html')}}">Elctions</a>
-      </div>
     </header>
-    <main class="white" style="background-color: gray;">
+    <main class="white" style="background-color: gray; padding-bottom: 5%;">
       {{include}}
     </main>
      <footer class="black">
-      <div class="silver center padded social" style="background-color: black;">
-        <a href="{{=URL('default','workflow.html')}}">WorkFlow</a>
-        <a href="">Source code</a>
+      <div class="silver center padded social" style="background-color: black; height:5% ;">
+        <div class="footer_content" >
+          <p><a href="https://github.com/tim20010803/evote">Source code</a>  
+            author: b07505035 author: b07505035 author: b07505035 author: b07505035</p>
+        </div >
+        
       </div>
     </footer>
   </body>

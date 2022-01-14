@@ -38,12 +38,14 @@
     width: 33.33%;    
     height: 100%;
     padding: 0;
-    background: none;
+    /* background-color: rgb(88, 85, 104); */
     float:left;    
     text-align:center;
     border-style: solid;
     border-width: 1px;
   }
+
+
   .useful_button {
     padding: 2rem;
   }
