@@ -59,6 +59,7 @@
 'Controller': '控件',
 'Controllers': '控件',
 'Copyright': '版權所有',
+'Create Election': 'Create Election',
 'Create new application': '創建應用程式',
 'Created By': 'Created By',
 'Created On': 'Created On',
