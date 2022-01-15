@@ -80,3 +80,54 @@ span {
 #new_elc_btn {
     padding-left: 80%;
 }
+
+.form_button_cell {
+    width: 10%;
+    padding-left: 2px;
+    float:left;
+}
+.form_button {
+    appearance: none;
+    background-color: rgb(54, 83, 102);
+    border: 2px solid #3d3c3c;
+    border-radius: 15px;
+    box-sizing: border-box;
+    color: #3d3c3c;
+    cursor: pointer;
+    display: inline-block;
+    font-family: Roobert,-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";
+    font-size: 16px;
+    font-weight: 600;
+    line-height: normal;
+    margin: 0;
+    min-height: 30px;
+    min-width: 0;
+    outline: none;
+    text-align: center;
+    text-decoration: none;
+    transition: all 300ms cubic-bezier(.23, 1, 0.32, 1);
+    user-select: none;
+    -webkit-user-select: none;
+    touch-action: manipulation;
+    width: 100%;
+    will-change: transform;
+}
+
+.form_button:disabled {
+    pointer-events: none;
+}
+
+.form_button:hover {
+    color: #fff;
+    background-color: #1A1A1A;
+    box-shadow: rgba(0, 0, 0, 0.25) 0 8px 15px;
+    transform: translateY(-2px);
+}
+
+.form_button:active {
+    box-shadow: none;
+    transform: translateY(0);
+}
+#new_elc_btn {
+    padding-left: 80%;
+}

@@ -1,5 +1,5 @@
 {{extend 'layout2.html'}}
-
+<link href="{{=URL('static','css/buttontype.css')}}" rel="stylesheet" type="text/css"/>
 <div class="container max900">
   <div class="fill">
     <div class="padded">
@@ -8,8 +8,15 @@
       {{=form}}
       
       <p>{{=T('Election is completely re-counted every time this page is visited. You can see the individual ballots which have been counted and their associated tokens here')}}</p>
-      
-      {{=A(T('Ballots'),_href=URL('ballots',args=election.id),_class="btn")}}
+    </div>
+  </div>
+</div>
+<div class="container max900">
+  <div class="fill">
+    <div class="padded">
+      <div class="form_button_cell" style="margin-left: 30%;"> 
+        {{=A(T('Ballots'),_href=URL('ballots',args=election.id),_class="form_button")}}
+      </div> 
     </div>
   </div>
 </div>

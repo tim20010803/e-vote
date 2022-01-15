@@ -424,13 +424,14 @@ def verify_ballot():
     public_key_show=election.public_key
     public_key=rsa.PublicKey.load_pkcs1(public_key_show)
     try:
-        valid = "valid" if rsa.verify(ballot_content.encode(), signature, public_key) else "invalid"
+        valid = "valid (untampered)" if rsa.verify(ballot_content.encode(), signature, public_key) else "invalid (be tampered)"
     except:        
-        valid="invalid"
+        valid="invalid (be tampered)"
     # return public_key
     return dict(ballot_content=T(str(ballot_content)),
                 signature=T(str(signature_split)),
                 public_key=T(str(public_key)),
+                public_key_show=T(str(public_key_show)),
                 valid=T(str(valid)))
 
 def vote():

@@ -1,5 +1,5 @@
 {{extend 'layout2.html'}}
-
+<link href="{{=URL('static','css/buttontype.css')}}" rel="stylesheet" type="text/css"/>
 <div class="container max900">
   <div class="fill">
     <div class="padded">
@@ -13,17 +13,27 @@
       <div style="padding-bottom: 10px;padding-top: 10px;">
       <p>{{=T('The signature is an RSA digital signature generated from the ballot content and the election private_key')}}</p>
       </div>
+      <div class="form_button_cell">
+        {{=A(T('Election Results'),_href=URL('results',args=ballot.election_id),_class="form_button")}}
+      </div>
+      <div class="form_button_cell">
+        {{=A(T('Ballots'),_href=URL('ballots',args=ballot.election_id),_class="form_button")}}
+      </div>
+      <div class="form_button_cell">
+        {{=A(T('Ballot Origin Code'),_href=URL('ballot_verifier.py',args=request.args),_class="form_button")}}
+      </div>
+    </div>
+  </div>
+</div>
 
-      {{=A(T('Election Results'),_href=URL('results',args=ballot.election_id),_class="btn")}}
-      {{=A(T('Ballots'),_href=URL('ballots',args=ballot.election_id),_class="btn")}}
-      {{=A(T('Ballot Verification Code'),_href=URL('ballot_verifier.py',args=request.args),_class="btn")}}
-
-      <div>
-        <h3>Verify ballot</h3>
-        
+<div class="container max900">
+  <div class="fill">
+    <div class="padded">
+      <div ><h3>Verify ballot</h3></div>
+      <div class="form_button_cell">
+        {{=A(T('Verify ballot'),_href=URL('default','verify_ballot.html',args=request.args),_class="form_button")}}
       </div>
 
-      {{=A(T('test verify ballot'),_href=URL('default','verify_ballot.html',args=request.args),_class="btn")}}
     </div>
   </div>
 </div>

@@ -1,5 +1,5 @@
 {{extend 'layout2.html'}}
-
+<link href="{{=URL('static','css/buttontype.css')}}" rel="stylesheet" type="text/css"/>
 <div class="container max900">
   <div class="fill">
     <div class="padded">
@@ -23,7 +23,9 @@
         {{for ballot in ballots:}}
         <tr>
           <td>
-            {{=A(ballot.ballot_uuid,_href=URL('ballot',args=ballot.ballot_uuid),_class="btn btn-small")}}
+            <div class="form_button_cell" style="width: 50%;padding-left: 1px;">
+            {{=A(ballot.ballot_uuid,_href=URL('ballot',args=ballot.ballot_uuid),_class="form_button")}}
+          </div>
           </td>
           <td>
             {{=ballot.voted_on or T('BLANK')}}
@@ -34,7 +36,15 @@
 
       {{import os}}
       {{if os.path.exists(os.path.join(request.folder,'static','zips','%s.zip' % election.id)):}}
-      <a href="{{=URL('static','zips/%s.zip' % election.id)}}" class="btn">{{=T('Downoad Ballots')}}</a>
+      <div class="container max900">
+        <div class="fill">
+          <div class="padded">
+            <div class="form_button_cell" style="width: 30%;margin-left:30%;">
+              <a href="{{=URL('static','zips/%s.zip' % election.id)}}" class="form_button">{{=T('Downoad Ballots')}}</a>
+            </div>
+          </div>
+        </div>
+      </div>
       {{pass}}
     </div>
   </div>

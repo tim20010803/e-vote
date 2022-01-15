@@ -38,8 +38,12 @@
                 Created on {{=ballot.election.created_on}}
               </td>
               <td>
-                <a class="btn" style="float:right" href="{{=URL('vote',args=(ballot.election.id,ballot.voter.voter_uuid))}}">Vote</a>
-                <a class="btn" style="float:right" href="{{=URL('ballots',args=(ballot.election.id))}}">Ballots</a>
+                <!-- <div class="form_button_cell"> -->
+                  <a class="btn" style="float:right" href="{{=URL('vote',args=(ballot.election.id,ballot.voter.voter_uuid))}}">Vote</a>
+                <!-- </div>
+                <div class="form_button_cell"> -->
+                  <a class="btn" style="float:right" href="{{=URL('ballots',args=(ballot.election.id))}}">Ballots</a>
+                <!-- </div> -->
               </td>
             </tr>
             {{pass}}
@@ -117,8 +121,12 @@
                 Created on {{=ended_election.election.created_on}}
               </td>
               <td>
+              <!-- <div class="form_button_cell"> -->
                 <a class="btn" style="float:right" href="{{=URL('ballots',args=(ended_election.election.id))}}">Ballots</a>
+              <!-- </div>
+              <div class="form_button_cell"></div> -->
                 <a class="btn" style="float:right" href="{{=URL('results',args=(ended_election.election.id,ended_election.voter.voter_uuid))}}">Result</a>
+              <!-- </div> -->
               </td>
             </tr>
             {{pass}}
