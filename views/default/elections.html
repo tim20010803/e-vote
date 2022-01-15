@@ -17,7 +17,7 @@
             <li><a href="#tab-3">Ended Election</a></li>
             <li id="new_elc_btn">
               {{=A(T('Create Election'),_href=URL('edit'),_class="btn")}}
-              {{pass}}        
+              {{pass}}
             </li>
         </ul>
 
@@ -52,7 +52,7 @@
         <div class="tab-content-2">
           {{if elections:}}
           <h4>Elections managed by you</h4>
-    
+
           <table class="fill">
             {{for election in elections:}}
             <tr>
@@ -79,12 +79,12 @@
                 {{=LI(A(I(_class='icon-edit'),' ',T('Edit Election'),_href=URL('edit',args=election.id)))}}
                 {{=LI(A(I(_class='icon-play-circle'),' ',T('Start Election'),_href=URL('start',args=election.id)))}}
                 {{=LI(A(I(_class='icon-play-circle'),' ',T('Delete Election'),_href=URL('delete_election',args=election.id)))}}
-    
+
                 {{elif not election.closed:}}
                 {{=LI(A(I(_class='icon-folder-open'),' ',T('Ballots'),_href=URL('ballots',args=election.id)))}}
                 {{=LI(A(I(_class='icon-envelope'),' ',T('Send Reminder'),_href=URL('reminders',args=election.id)))}}
                 {{=LI(A(I(_class='icon-off'),' ',T('Close Election'),_href=URL('close_election',args=election.id)))}}
-    
+
                 {{else:}}
                 {{=LI(A(I(_class='icon-folder-open'),' ',T('Ballots'),_href=URL('ballots',args=election.id)))}}
                 {{=LI(A(I(_class='icon-list'),' ',T('Results'),_href=URL('results',args=election.id)))}}
@@ -104,7 +104,7 @@
 
         <div class="tab-content-3">
           <h4>Ended Elections </h4>
-          {{if ballots:}}
+
           <table class="fill">
             {{for ended_election in ended_elections:}}
             <tr>
@@ -123,7 +123,7 @@
             </tr>
             {{pass}}
           </table>
-          {{pass}}
+
         </div>
     </div>
 

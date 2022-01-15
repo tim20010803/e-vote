@@ -16,7 +16,9 @@ def elections():
     for election in elections:
         if election.deadline and (election.deadline) < request.now and not election.closed:
             db(db.election.deadline < request.now).update(closed=True)
-            print("cl")
+    # ended_elections=db(db.election.closed == True).select()
+    print(ended_elections,"  hi")
+
     return dict(elections=elections,ballots=ballots,ended_elections=ended_elections)
 
 # @auth.requires(auth.user and auth.user.is_manager)
