@@ -4,8 +4,8 @@
     scroll-behavior: smooth;
   }
   .tutorial_menu_cell {
-    width: 30%;
-    padding-left: 2rem;
+    width: 25%;
+    padding-left: 0.5rem;
     float:left;
   }
   .tutorial_img {
@@ -25,6 +25,12 @@
         <div class="tutorial_menu_cell">
           <button class="menu_button" role="button" onclick="window.location.href='#election'">Create Election</button>
         </div>
+        <div class="tutorial_menu_cell">
+          <button class="menu_button" role="button" onclick="window.location.href='#vote'">Ballot and Vote</button>
+        </div>
+        <div class="tutorial_menu_cell">
+          <button class="menu_button" role="button" onclick="window.location.href='#verify'">Ballot Verification</button>
+        </div>
       </div>
     </div>
   </div>
@@ -43,6 +49,7 @@
       <img class="tutorial_img" src={{=URL('static', 'images/signupemail.png')}}>
       <p>至郵件中點選驗證連結即完成註冊!</p>
       <img class="tutorial_img" src={{=URL('static', 'images/mailverify.png')}}>
+
       <h4 id="election"><a href=#tutorial style="color: black;">Create Election</a></h4>
       <p>註冊完成並登入後，便可看到管理介面</p>
       <p>點選Vote、Manage Election、Ended Election即可切換至各類選舉</p>
@@ -51,9 +58,25 @@
       <img class="tutorial_img" src={{=URL('static', 'images/election_1.png')}}>
       <p>最後按下Save and Preview按鈕後，便可儲存選舉資訊，並可決定是否開始選舉</p>
       <img class="tutorial_img" src={{=URL('static', 'images/election_2.png')}} style="border-style:solid;border-width: 1px;">
+
+      <h4 id="vote"><a href=#tutorial style="color: black;">Ballot and Vote</a></h4>
+      
+
+      <h4 id="verify"><a href=#tutorial style="color: black;">Ballot Verification</a></h4>
     </div>
   </div>
 </div>
+
+
+
+
+
+<h6 id="side_account"><a href="#account"style="position: fixed;top: 100px;right:40px;color: rgb(61, 60, 60);">Create Account</a></h6>
+<h6 id="side_election"><a href="#election" style="position: fixed;top: 120px;right:40px;color: rgb(61, 60, 60);">Create Election</a></h6>
+<h6 id="side_vote"><a href="#vote" style="position: fixed;top: 140px;right:40px;color: rgb(61, 60, 60);">Ballot and Vote</a></h6>
+<h6 id="side_verify"><a href="#verify" style="position: fixed;top: 160px;right:40px;color: rgb(61, 60, 60);">Ballot Verification</a></h6>
+
+
 <a href="#gotop" >
   <button class="menu_button"  id="gootop" role="button"  style="position: fixed;bottom: 60px;right:40px;width:5%">Top</button>
 </a>
@@ -62,10 +85,18 @@
   $(function () {
       $(function(){
           $(window).scroll(function(){
-              if($(window).scrollTop() > 100){
+              if($(window).scrollTop() > 200){
                   $("#gootop").fadeIn(1000);//一秒漸入動畫
+                  $("#side_account").fadeIn(1000);
+                  $("#side_election").fadeIn(1000);
+                  $("#side_vote").fadeIn(1000);
+                  $("#side_verify").fadeIn(1000);
               }else{
                   $("#gootop").fadeOut(1000);//一秒漸隱動畫
+                  $("#side_account").fadeOut(1000);
+                  $("#side_election").fadeOut(1000);
+                  $("#side_vote").fadeOut(1000);
+                  $("#side_verify").fadeOut(1000);
               }
           });
       });

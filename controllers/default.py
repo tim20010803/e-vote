@@ -1,6 +1,7 @@
 from ballot import ballot2form, form2ballot, blank_ballot, sign, uuid, regex_email, rsakeys
 import re
 import json
+import rsa, base64
 def index():
     return dict()
 
@@ -409,8 +410,28 @@ def recorded():
     return dict()
 
 def ballot_verifier():
-    response.headers['Content-Type'] = 'text/plain'
+    # response.headers['Content-Type'] = 'text/plain'
     return ballot()
+
+def verify_ballot():
+    ballot_data = ballot_verifier().keys()
+    uuid = ballot_verifier().get("ballot_uuid")
+    ballot = ballot_verifier().get("ballot")
+    election=ballot_verifier().get("election")
+    ballot_content = ballot.ballot_content
+    signature_split = ballot.signature.split('-')[1]
+    signature = base64.b16decode(signature_split)
+    public_key_show=election.public_key
+    public_key=rsa.PublicKey.load_pkcs1(public_key_show)
+    try:
+        valid = "valid" if rsa.verify(ballot_content.encode(), signature, public_key) else "invalid"
+    except:        
+        valid="invalid"
+    # return public_key
+    return dict(ballot_content=T(str(ballot_content)),
+                signature=T(str(signature_split)),
+                public_key=T(str(public_key)),
+                valid=T(str(valid)))
 
 def vote():
     import hashlib

@@ -1,0 +1,18 @@
+{{extend 'layout2.html'}}
+<div class="container max900">
+    <div class="fill">
+        <div class="padded">
+            <h3>ballot format</h3>
+            {{=XML(ballot_content)}}
+            <h3>ballot content </h3>
+            {{=ballot_content}}
+            <h3>signature</h3>
+            {{=signature}}
+            <h3>public key</h3>
+            {{=public_key}}
+            <h3>valid</h3>
+            {{=valid}}
+
+        </div>
+    </div>
+</div>    
