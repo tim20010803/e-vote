@@ -1,24 +1,40 @@
 {{extend 'layout2.html'}}
 <style>
+  html {
+    scroll-behavior: smooth;
+  }
+  .tutorial_menu_cell {
+    width: 30%;
+    padding-left: 2rem;
+    float:left;
+  }
   .tutorial_img {
     padding-top:5px ;
     padding-bottom: 5px;
   }
 </style>
+<span  id="gotop"></span>
 <div class="container max900">
   <div class="fill">
     <div class="padded">
       <h2 id="tutorial">Tutorial</h2>
-      <!-- <div class="header_menu" style=" padding-top:15px;padding-bottom: 15px;">
-        <div class="header_menu_cell">
+      <div class="header_menu" style=" padding-top:15px;padding-bottom: 15px;">
+        <div class="tutorial_menu_cell">
           <button class="menu_button" role="button" onclick="window.location.href='#account'">Create Account</button>
         </div>
-        <div class="header_menu_cell">
+        <div class="tutorial_menu_cell">
           <button class="menu_button" role="button" onclick="window.location.href='#election'">Create Election</button>
         </div>
-      </div> -->
-      <h4><a href=#tutorial style="color: black;">Create Account</a></h4>
-      <p id="account">進入首頁後，可點選Get Started開始，或點選右上進行使用者登入</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="container max900">
+  <div class="fill">
+    <div class="padded">
+      <h4 id="account"><a href=#tutorial style="color: black;">Create Account</a></h4>
+      <p>進入首頁後，可點選Get Started開始，或點選右上進行使用者登入</p>
       <img class="tutorial_img" src={{=URL('static', 'images/homepage_001.png')}}>
       <p>在建立選舉前，須先建立帳號</p>
       <img class="tutorial_img" src={{=URL('static', 'images/homepage_002.png')}}>
@@ -38,3 +54,20 @@
     </div>
   </div>
 </div>
+<a href="#gotop" >
+  <button class="menu_button"  id="gootop" role="button"  style="position: fixed;bottom: 60px;right:40px;width:5%">Top</button>
+</a>
+
+<script>
+  $(function () {
+      $(function(){
+          $(window).scroll(function(){
+              if($(window).scrollTop() > 100){
+                  $("#gootop").fadeIn(1000);//一秒漸入動畫
+              }else{
+                  $("#gootop").fadeOut(1000);//一秒漸隱動畫
+              }
+          });
+      });
+  });
+</script>
