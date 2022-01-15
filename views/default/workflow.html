@@ -1,9 +1,40 @@
 {{extend 'layout2.html'}}
-
+<style>
+  .tutorial_img {
+    padding-top:5px ;
+    padding-bottom: 5px;
+  }
+</style>
 <div class="container max900">
   <div class="fill">
     <div class="padded">
-      <h3>Maybe some info here</h3>
+      <h2 id="tutorial">Tutorial</h2>
+      <!-- <div class="header_menu" style=" padding-top:15px;padding-bottom: 15px;">
+        <div class="header_menu_cell">
+          <button class="menu_button" role="button" onclick="window.location.href='#account'">Create Account</button>
+        </div>
+        <div class="header_menu_cell">
+          <button class="menu_button" role="button" onclick="window.location.href='#election'">Create Election</button>
+        </div>
+      </div> -->
+      <h4><a href=#tutorial style="color: black;">Create Account</a></h4>
+      <p id="account">進入首頁後，可點選Get Started開始，或點選右上進行使用者登入</p>
+      <img class="tutorial_img" src={{=URL('static', 'images/homepage_001.png')}}>
+      <p>在建立選舉前，須先建立帳號</p>
+      <img class="tutorial_img" src={{=URL('static', 'images/homepage_002.png')}}>
+      <p>在按下signup後，系統會寄送驗證信至所填寫的信箱</p>
+      <img class="tutorial_img" src={{=URL('static', 'images/signup.png')}}>
+      <img class="tutorial_img" src={{=URL('static', 'images/signupemail.png')}}>
+      <p>至郵件中點選驗證連結即完成註冊!</p>
+      <img class="tutorial_img" src={{=URL('static', 'images/mailverify.png')}}>
+      <h4 id="election"><a href=#tutorial style="color: black;">Create Election</a></h4>
+      <p>註冊完成並登入後，便可看到管理介面</p>
+      <p>點選Vote、Manage Election、Ended Election即可切換至各類選舉</p>
+      <p>點選Create Election即可建立新的選舉</p>
+      <img class="tutorial_img" src={{=URL('static', 'images/manage_002.png')}}>
+      <img class="tutorial_img" src={{=URL('static', 'images/election_1.png')}}>
+      <p>最後按下Save and Preview按鈕後，便可儲存選舉資訊，並可決定是否開始選舉</p>
+      <img class="tutorial_img" src={{=URL('static', 'images/election_2.png')}} style="border-style:solid;border-width: 1px;">
     </div>
   </div>
 </div>
