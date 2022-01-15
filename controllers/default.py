@@ -52,6 +52,7 @@ def edit():
 
 # @auth.requires(auth.user and auth.user.is_manager)
 # @auth.requires(auth.user)
+@auth.requires_login()
 def start():
     election = db.election(request.args(0,cast=int)) or redirect(URL('index'))
     check_closed(election)
@@ -65,6 +66,11 @@ def start():
 # @auth.requires(auth.user)
 def start_callback():
     election = db.election(request.args(0,cast=int)) or redirect(URL('index'))
+    if (auth.user.email!=election.manager):
+        session.flash = T('You are not the one running this election!')
+        redirect(URL('index'),client_side=True)
+    print(auth.user.email)
+    print(election.manager)
     check_closed(election)
     form = SQLFORM.factory(
         submit_button=T('Email Voters and Start Election Now!'))

@@ -300,6 +300,7 @@
 'Working...': 'Working...',
 'YES': '是',
 'You already voted': 'You already voted',
+'You are not the one running this election!': 'You are not the one running this election!',
 'You visited the url %s': 'You visited the url %s',
 'Your vote was recorded and we sent you an email': 'Your vote was recorded and we sent you an email',
 }
