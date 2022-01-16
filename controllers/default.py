@@ -18,7 +18,7 @@ def elections():
         if election.deadline and (election.deadline) < request.now and not election.closed:
             db(db.election.deadline < request.now).update(closed=True)
     # ended_elections=db(db.election.closed == True).select()
-    print(ended_elections,"  hi")
+    # print(ended_elections,"  hi")
 
     return dict(elections=elections,ballots=ballots,ended_elections=ended_elections)
 
@@ -49,7 +49,7 @@ def edit():
             session.flash = T('Deadline cannot set in past')
             redirect(URL('edit',args=form.vars.id))
         else :
-            print(form.vars.ballot_model)
+            # print(form.vars.ballot_model)
             redirect(URL('start',args=form.vars.id))
     return dict(form=form)
 
@@ -72,8 +72,8 @@ def start_callback():
     if (auth.user.email!=election.manager):
         session.flash = T('You are not the one running this election!')
         redirect(URL('index'),client_side=True)
-    print(auth.user.email)
-    print(election.manager)
+    # print(auth.user.email)
+    # print(election.manager)
     check_closed(election)
     form = SQLFORM.factory(
         submit_button=T('Email Voters and Start Election Now!'))
@@ -84,7 +84,7 @@ def start_callback():
     url='applications/evote/uploads/'+str(election.voters)
     with open(url) as stream:
         election.voters=stream.read()
-    print("test "+election.voters)
+    # print("test "+election.voters)
     if form.process().accepted:
         ballot_counter = db(db.ballot.election_id==election.id).count()
         for email in regex_email.findall(election.voters):
@@ -123,7 +123,7 @@ def start_callback():
                                       deadline=election.deadline)
             if election.comments_not_voted_email!= None:
                 body=election.comments_vote_email+"\n"+body
-            print(body)
+            # print(body)
             subject = '%s [%s]' % (election.title, election.id)
             emails.append((voter,email,subject,body))
         db.commit()
@@ -166,7 +166,7 @@ def self_service():
                                       link_results=link_results,
                                       deadline=election.deadline)
             body=body+"\n"+election.comments_vote_email
-            print(body)
+            # print(body)
             sender = election.email_sender or mail.settings.sender
             if mail.send(to=voter.email, subject=election.title, message=body, sender=sender):
                 response.flash = T('Email sent')
@@ -209,7 +209,7 @@ def reminders_callback():
                                       link_results=link_results,
                                       deadline=election.deadline)
             body=election.comments_vote_email+"\n"+body
-            print(body)
+            # print(body)
             subject = '%s [%s]' % (election.title, election.id)
             emails.append((email,subject,body))
     form = SQLFORM.factory(*fields).process()
@@ -355,7 +355,7 @@ def close_election():
                                       signature=ballot.signature,link=link)
             if election.comments_not_voted_email!= None:
                 body=election.comments_not_voted_email+"\n"+body
-            print(body)
+            # print(body)
             email_voter_and_manager(election,voter,ballot,body)
         compute_results(election)
         zippath = os.path.join(request.folder,'static','zips')
@@ -480,7 +480,7 @@ def vote():
                                   deadline=election.deadline)
         if election.comments_voted_email!= None:
             body=election.comments_voted_email+"\n"+body
-        print(body)
+        # print(body)
         emailed = email_voter_and_manager(election,voter,ballot,body)
         session.flash = \
             T('Your vote was recorded and we sent you an email') \
