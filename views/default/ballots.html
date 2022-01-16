@@ -12,7 +12,7 @@
         {{=T('Used Ballots/Votes:')}} {{=len([t for t in ballots if not t.voted_on is None])}}</h4>
       
       {{if tampered:}}
-      <div class="red center">Ballot text has been edited during the election</div>
+      <div class="red center">Ballot text may have been edited during the election</div>
       {{pass}}
       
       <table class="white">

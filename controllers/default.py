@@ -248,7 +248,7 @@ def compute_results(election):
 
             key = name +'/'+ballot_way+'/' + ballot.results[name]
             (name,scheme,value) = key.split('/',3)
-            # print(name,scheme,value,"aaaa")
+            print(name,scheme,value,"aaaa")
             if scheme == 'simple-majority':
 
                 # counters[key] counts how many times this checkbox was checked
