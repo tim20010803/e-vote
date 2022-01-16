@@ -54,19 +54,19 @@ def ballot2form(ballot_model, readonly=False, vars=None, counters=None, closed=N
         if counters and closed:    #如果counters是None，表示選舉還沒結束
             options = []
             # print(question['algorithm'],"喔喔喔")
-            print("counters",counters)
+            # print("counters",counters)
             for answer in question['answers']:
                 key = name+ '/'+question['algorithm']+'/' +answer
                 options.append((counters.get(key,0), answer))
                 # print(options)
             options.sort(reverse=True)
             options = map(lambda a: a[1], options)
-            print("if option ",options)
+            # print("if option ",options)
         else:
             options = question['answers']
             if question['randomize']:
                 random.shuffle(options)
-            print("else option ",options)
+            # print("else option ",options)
         for answer in options:
             key = name + '/'+question['algorithm']+'/' + answer
             # if not counters:
