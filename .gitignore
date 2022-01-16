@@ -4,3 +4,4 @@ static/zips/*
 uploads/*
 errors/*
 __pycache__/
+zh.py

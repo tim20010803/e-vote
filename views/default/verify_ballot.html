@@ -1,0 +1,28 @@
+{{extend 'layout2.html'}}
+<div class="container max900">
+    <div class="fill">
+        <div class="padded">
+            <h3>Ballot format</h3>
+            {{=XML(ballot_content)}}
+            <h3>Ballot content </h3>
+            <p><strong>Below is the origin content from above ballot format</strong></p>
+            <pre style="overflow-x:scroll">{{=ballot_content}}</pre>
+            <h3>signature</h3>
+            <pre style="overflow-x:scroll">{{=signature}}</pre>
+
+            <h3>Public key</h3>
+            <p><strong>Original rsa public key </strong></p>
+            <pre>{{=public_key_show}}</pre>
+
+            <p><strong>Rsa public key after compute</strong></p>
+            <pre style="overflow-x:scroll">{{=public_key}}</pre>
+
+            <h3>Verification</h3>
+            <p><strong>Result: </strong>{{=valid}}</p>
+            <p><strong>Or you can self compute the result through this
+                <a href="https://github.com/tim20010803/evote/blob/main/views/default/verify.py" style="color: rgb(48, 32, 32);">
+                    code</a> and also get input data from ballot origin code </strong></p>
+        
+        </div>
+    </div>
+</div>    

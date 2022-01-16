@@ -1,6 +1,7 @@
 from ballot import ballot2form, form2ballot, blank_ballot, sign, uuid, regex_email, rsakeys
 import re
 import json
+import rsa, base64
 def index():
     return dict()
 
@@ -16,7 +17,9 @@ def elections():
     for election in elections:
         if election.deadline and (election.deadline) < request.now and not election.closed:
             db(db.election.deadline < request.now).update(closed=True)
-            print("cl")
+    # ended_elections=db(db.election.closed == True).select()
+    print(ended_elections,"  hi")
+
     return dict(elections=elections,ballots=ballots,ended_elections=ended_elections)
 
 # @auth.requires(auth.user and auth.user.is_manager)
@@ -52,6 +55,7 @@ def edit():
 
 # @auth.requires(auth.user and auth.user.is_manager)
 # @auth.requires(auth.user)
+@auth.requires_login()
 def start():
     election = db.election(request.args(0,cast=int)) or redirect(URL('index'))
     check_closed(election)
@@ -65,6 +69,11 @@ def start():
 # @auth.requires(auth.user)
 def start_callback():
     election = db.election(request.args(0,cast=int)) or redirect(URL('index'))
+    if (auth.user.email!=election.manager):
+        session.flash = T('You are not the one running this election!')
+        redirect(URL('index'),client_side=True)
+    print(auth.user.email)
+    print(election.manager)
     check_closed(election)
     form = SQLFORM.factory(
         submit_button=T('Email Voters and Start Election Now!'))
@@ -401,8 +410,29 @@ def recorded():
     return dict()
 
 def ballot_verifier():
-    response.headers['Content-Type'] = 'text/plain'
+    # response.headers['Content-Type'] = 'text/plain'
     return ballot()
+
+def verify_ballot():
+    ballot_data = ballot_verifier().keys()
+    uuid = ballot_verifier().get("ballot_uuid")
+    ballot = ballot_verifier().get("ballot")
+    election=ballot_verifier().get("election")
+    ballot_content = ballot.ballot_content
+    signature_split = ballot.signature.split('-')[1]
+    signature = base64.b16decode(signature_split)
+    public_key_show=election.public_key
+    public_key=rsa.PublicKey.load_pkcs1(public_key_show)
+    try:
+        valid = "valid (untampered)" if rsa.verify(ballot_content.encode(), signature, public_key) else "invalid (be tampered)"
+    except:        
+        valid="invalid (be tampered)"
+    # return public_key
+    return dict(ballot_content=T(str(ballot_content)),
+                signature=T(str(signature_split)),
+                public_key=T(str(public_key)),
+                public_key_show=T(str(public_key_show)),
+                valid=T(str(valid)))
 
 def vote():
     import hashlib

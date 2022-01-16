@@ -1,9 +1,13 @@
-{{extend 'layout.html'}}
+{{extend 'layout2.html'}}
 
 <div class="container max900">
   <div class="fill">
     <div class="padded">
-      <p>{{=T('Sure you want to delete this election ?')}}</p>
+      <h2>{{=T('The election will be deleted.')}}</h2>
+      <h4>Election Title: {{=election.title}}</h4>
+      <p>Created on {{=election.created_on}}</p>
+      <p>Election status: {{if election.closed:}}closed
+        {{elif election.started:}}started{{pass}}</p>
 
       {{=dialog}}
     </div>
